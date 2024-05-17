@@ -1,0 +1,324 @@
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/Floor.proto"
+
+WorldInfo {
+  basicTimeStep 3
+  contactProperties [
+    ContactProperties {
+      coulombFriction [
+        4
+      ]
+      bounce 0
+    }
+  ]
+}
+Viewpoint {
+  orientation 0.2540523440307242 0.42383673743907746 -0.8693789889855246 1.1535688032071667
+  position -6.702288707025483 10.739093453044553 10.420170074814582
+  follow "robot:solid:solid"
+  followType "None"
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+Floor {
+  appearance PBRAppearance {
+    baseColor 0.4 0.3 0.1
+    roughness 1
+    metalness 0
+  }
+}
+Solid {
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0 1 0
+        emissiveColor 0 1 0
+        emissiveIntensity 0.4
+      }
+      geometry Cylinder {
+        height 0.1
+        radius 3.69
+      }
+    }
+  ]
+  name "solid(4)"
+}
+Solid {
+  translation 0 0 0.01
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 1 0 0
+        emissiveColor 1 0 0
+      }
+      geometry Cylinder {
+        height 0.1
+        radius 1.39
+      }
+    }
+  ]
+  name "solid(5)"
+}
+Solid {
+  translation -3.76 -1.38108e-05 0
+  rotation 0 0 1 1.5708
+  children [
+    Shape {
+      geometry DEF wall Box {
+        size 10 0.2 1.4
+      }
+    }
+  ]
+  boundingObject USE wall
+}
+Solid {
+  translation 3.77 -0.59 0
+  rotation 0 0 1 1.5708
+  children [
+    Shape {
+      geometry DEF wall Box {
+        size 10 0.2 1.4
+      }
+    }
+  ]
+  name "solid(1)"
+  boundingObject USE wall
+}
+Solid {
+  translation 0 -3.74 0
+  children [
+    Shape {
+      geometry DEF wall Box {
+        size 10 0.2 1.4
+      }
+    }
+  ]
+  name "solid(2)"
+  boundingObject USE wall
+}
+Solid {
+  translation 0 0 -0.01
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 1 0 0
+        emissiveColor 1 0 0
+      }
+      geometry DEF wall Box {
+        size 7.5 7.5 0.1
+      }
+    }
+  ]
+  name "solid(6)"
+  boundingObject USE wall
+}
+Solid {
+  translation 0 3.66 0
+  children [
+    Shape {
+      geometry DEF wall Box {
+        size 10 0.2 1.4
+      }
+    }
+  ]
+  name "solid(3)"
+  boundingObject USE wall
+}
+Robot {
+  translation 0 0 1
+  children [
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        axis 0 0 5
+        anchor 0 0 1
+      }
+      device [
+        PositionSensor {
+          name "arm1Sensor"
+        }
+        RotationalMotor {
+          name "arm1motor"
+        }
+      ]
+      endPoint Solid {
+        translation 1.28 7.00975e-08 1.11
+        children [
+          HingeJoint {
+            jointParameters HingeJointParameters {
+              axis 0 0 3
+              anchor 1.26 0 0
+            }
+            device [
+              PositionSensor {
+                name "arm2Sensor"
+              }
+              RotationalMotor {
+                name "arm2motor"
+              }
+            ]
+            endPoint Solid {
+              translation 1.8 0 -0.2
+              children [
+                SliderJoint {
+                  jointParameters JointParameters {
+                    axis 0 0 4
+                  }
+                  device [
+                    PositionSensor {
+                      name "gripperHeightSensor"
+                    }
+                    LinearMotor {
+                      name "gripperHeightMotor"
+                      minPosition -0.3
+                    }
+                  ]
+                  endPoint Solid {
+                    translation 0.61 0 0.02
+                    children [
+                      HingeJoint {
+                        jointParameters HingeJointParameters {
+                          position -0.2
+                          axis -4 0 0
+                          anchor 0 0.009 -0.43
+                        }
+                        device [
+                          PositionSensor {
+                            name "rightGripperFinger_sensor"
+                          }
+                          RotationalMotor {
+                            name "rightGripperFinger"
+                            maxVelocity 99999
+                            maxTorque 0.4
+                          }
+                        ]
+                        endPoint Solid {
+                          translation 1.0561799996598244e-09 0.04933039999999099 -0.5534520000000536
+                          rotation 1 0 0 0.1999999999999989
+                          children [
+                            DEF gripperFingerShape Shape {
+                              appearance PBRAppearance {
+                                baseColor 1 0 1
+                                metalness 0
+                              }
+                              geometry Box {
+                                size 0.05 0.05 0.15
+                              }
+                            }
+                          ]
+                          name "solid(1)"
+                          boundingObject USE gripperFingerShape
+                          physics Physics {
+                          }
+                        }
+                      }
+                      HingeJoint {
+                        jointParameters HingeJointParameters {
+                          position -0.2
+                          axis 4 0 0
+                          anchor 0 -0.009 -0.43
+                        }
+                        device [
+                          RotationalMotor {
+                            name "leftGripperFinger"
+                            maxVelocity 99999
+                            maxTorque 0.4
+                          }
+                        ]
+                        endPoint Solid {
+                          translation 7.960769997975369e-08 -0.049329300000096755 -0.5534490000005357
+                          rotation -1.324578950409059e-07 0.09983341663512553 0.9950041652791913 3.141590013256781
+                          children [
+                            DEF gripperFingerShape Shape {
+                              appearance PBRAppearance {
+                                baseColor 1 0 1
+                                metalness 0
+                              }
+                              geometry Box {
+                                size 0.05 0.05 0.15
+                              }
+                            }
+                          ]
+                          boundingObject USE gripperFingerShape
+                          physics Physics {
+                          }
+                        }
+                      }
+                      DEF gripperbaseShape Shape {
+                        appearance PBRAppearance {
+                          baseColor 1 0 0
+                          metalness 0
+                        }
+                        geometry Box {
+                          size 0.1 0.1 0.9
+                        }
+                      }
+                    ]
+                    name "solid(1)"
+                    boundingObject USE gripperbaseShape
+                  }
+                }
+                DEF arm2 Shape {
+                  appearance PBRAppearance {
+                    baseColor 0 0 1
+                    metalness 0
+                  }
+                  geometry Box {
+                    size 1.6 0.5 0.2
+                  }
+                }
+              ]
+              boundingObject USE arm2
+            }
+          }
+          DEF arm1 Shape {
+            appearance PBRAppearance {
+              baseColor 0 0.6 1
+              metalness 0
+            }
+            geometry Box {
+              size 3 0.5 0.2
+            }
+          }
+        ]
+        boundingObject USE arm1
+      }
+    }
+    DEF robobase Shape {
+      appearance PBRAppearance {
+        baseColor 0 0.4 1
+        metalness 0
+      }
+      geometry Box {
+        size 1 1 2
+      }
+    }
+  ]
+  boundingObject USE robobase
+  controller "objectTracker"
+  supervisor TRUE
+}
+DEF MY_BOX Solid {
+  translation -0.5 -2.5 1
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 1 0 1
+        metalness 0
+      }
+      geometry DEF sphere Sphere {
+        radius 0.1
+        subdivision 4
+      }
+    }
+  ]
+  name "solid(7)"
+  boundingObject USE sphere
+  physics Physics {
+    density 3000
+  }
+}
