@@ -6,3 +6,5 @@ HOW TO USE:
 2. run 'git clone https://github.com/maxxol/Robotica24.git'
 3. run 'cd Robotica24'
 4. push/pull/commit from this directory using your favourite terminal application.
+
+build command: g++ -std=c++11 mainController.cpp calculator.cpp checkBluetooth.cpp -o mainController
