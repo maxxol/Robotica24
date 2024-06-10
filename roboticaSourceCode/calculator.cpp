@@ -89,7 +89,7 @@ Point calculateRealLifeCoordinates(int screen_x, int screen_y) {
 	object.x = camera_mount.x + object_x_relative;
 	object.y = camera_mount.y + object_y_relative;
 
-	std::cout << object.x << " " << object.y << std::endl;
+	//std::cout << object.x << " " << object.y << std::endl; //debug log
 	return object;
 }
 
@@ -109,15 +109,16 @@ double calculateGripperAngle(double vx, double vy) {
 	double angleRadians = std::atan2(py, px);
 	double angleDegrees = angleRadians * (180.0 / M_PI);
 
-	if (angleDegrees > 150)
-		angleDegrees-=180;
+    //account for the dead zone of the servos (<-150 and >150)
+	if (angleDegrees > 150) //if in dead zone
+		angleDegrees-=180; //flip it 180 degrees (same results as the gripper is bilaterally symmetrical)
 	if(angleDegrees < -150)
 		angleDegrees+=180;
-	std::cout << px << " " << py << " " << angleDegrees << std::endl;
+	//std::cout << px << " " << py << " " << angleDegrees << std::endl; //debug log
 	return angleDegrees;
 }
 
-//calculate the angles of the robot's elbow and base(shoulder)
+//calculate the angles of the robot's elbow and base
 double* calculateArmAngles(double x,double y,double distanceToTarget){ //x and y of the center of mass of the object, along with the distance.
 	double* armAngles = new double[2]; //create a pointer towards an array with two decimal numbers
 	//use trigonometry to calculate the angles: see https://www.geogebra.org/calculator/bf4wfqr5 for elaboration
@@ -129,7 +130,7 @@ double* calculateArmAngles(double x,double y,double distanceToTarget){ //x and y
 //run all the previous calculation
 double* calculator(double x, double y, double vx, double vy) {
 	double* results = new double[3];
-	std::cout << "external c++ calculator has run with parameters " << x << " " << y << " " << vx << " " << vy << " \n";
+	std::cout << "external c++ calculator has run with parameters " << x << " " << y << " " << vx << " " << vy << " \n"; //debug log
 
 	Point pointC = calculateRealLifeCoordinates(x,y);
 	double distanceToTarget = calculateDistanceToTarget(pointC.x,pointC.y); //calculate distance from base to target coordinates
