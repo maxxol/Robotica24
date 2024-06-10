@@ -31,8 +31,9 @@ struct Point {
 // Calculate the real-life coordinates of the object
 Point calculateRealLifeCoordinates(int screen_x, int screen_y) {
     // Convert screen coordinates to normalized coordinates (-1 to 1)
-    double normalized_x = (2.0 * screen_x / camera_width) - 1.0;
-    double normalized_y = 1.0 - (2.0 * screen_y / camera_height);
+    // The normalised x uses the y coordiantes and vice versa. if you dont do this the read coordinates are flipped 90 degrees for some reason
+    double normalized_y = (2.0 * screen_x / camera_width) - 1.0;
+    double normalized_x = 1.0 - (2.0 * screen_y / camera_height);
 
     // Calculate the camera's horizontal and vertical FOV in radians
     double diagonal_fov_radians = camera_fov * DEGREES_TO_RADIANS;

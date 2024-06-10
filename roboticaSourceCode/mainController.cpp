@@ -15,7 +15,7 @@ int main() {
     std::array<double, 4> computerVisionResults;
 
     while(true){
-        std::string pythonFilepath = "python3 /home/rob8/Desktop/roboticaSourceCode/python/";
+        std::string pythonFilepath = "python3 /home/rob8/Desktop/Robotica24/roboticaSourceCode/python/";
         std::string commandComputerVision = pythonFilepath + "computerVision.py";
         std::string commandRotateServos = pythonFilepath + "rotateServos.py";   
         FILE* pipe = popen(commandComputerVision.c_str(), "r");
@@ -38,13 +38,11 @@ int main() {
         }
 
         double* calcResults = calculator(computerVisionResults[0], computerVisionResults[1], computerVisionResults[2], computerVisionResults[3]);
-        //double* calcResults = calculator(320, 240, computerVisionResults[2], computerVisionResults[3]);
-        //std::cout << "RESULTS: " << calcResults[0] << std::endl;
 
-        commandRotateServos = commandRotateServos + " " + std::to_string(calcResults[0]) + " " + std::to_string(calcResults[1]) + " " + std::to_string(calcResults[2]);
-        system(commandRotateServos.c_str());
+        // commandRotateServos = commandRotateServos + " " + std::to_string(calcResults[0]) + " " + std::to_string(calcResults[1]) + " " + std::to_string(calcResults[2]);
+        // system(commandRotateServos.c_str());
 
-        checkBluetooth();
+        // checkBluetooth();
 
         std::cout << "main c++ program done-----------------------------------------------------" << std::endl;
        

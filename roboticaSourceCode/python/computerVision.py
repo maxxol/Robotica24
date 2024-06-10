@@ -63,11 +63,11 @@ def main():
     cont_img = cv.circle(cont_img, (320, 240), 1, color=(255, 255, 255), thickness=6)
 
     if GREEN_SCISSOR:
-        cv.imwrite('/home/rob8/Desktop/roboticaSourceCode/python/pyIMG/schaarRecht.jpg', cont_img)
-        cv.imwrite('/home/rob8/Desktop/roboticaSourceCode/python/pyIMG/schaarRechtThresh.jpg', thresh)
+        cv.imwrite('/home/rob8/Desktop/Robotica24/roboticaSourceCode/python/pyIMG/schaarRecht.jpg', cont_img)
+        cv.imwrite('/home/rob8/Desktop/Robotica24/roboticaSourceCode/python/pyIMG/schaarRechtThresh.jpg', thresh)
     else:
-        cv.imwrite('/home/rob8/Desktop/roboticaSourceCode/python/pyIMG/schaarScheef.jpg', cont_img)
-        cv.imwrite('/home/rob8/Desktop/roboticaSourceCode/python/pyIMG/schaarScheefThresh.jpg', thresh)
+        cv.imwrite('/home/rob8/Desktop/Robotica24/roboticaSourceCode/python/pyIMG/schaarScheef.jpg', cont_img)
+        cv.imwrite('/home/rob8/Desktop/Robotica24/roboticaSourceCode/python/pyIMG/schaarScheefThresh.jpg', thresh)
 
     rows, cols = cont_img.shape[:2]
     vx, vy, x, y = cv.fitLine(reshaped_contours, cv.DIST_L2, 0, 0.01, 0.01)
