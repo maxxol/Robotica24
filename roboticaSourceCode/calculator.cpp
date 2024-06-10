@@ -42,8 +42,8 @@ Point calculateRealLifeCoordinates(int screen_x, int screen_y) {
     double vertical_fov_radians = 2 * atan(tan(diagonal_fov_radians / 2) / sqrt(1 + (1 / aspect_ratio) * (1 / aspect_ratio)));
 
     // Calculate the real-life coordinates in the camera's frame of reference
-    double camera_x = normalized_x * tan(horizontal_fov_radians / 2) * camera_position_on_ulna;
-    double camera_y = normalized_y * tan(vertical_fov_radians / 2) * camera_position_on_ulna;
+    double camera_x = 2 * normalized_x * tan(horizontal_fov_radians / 2) * camera_position_on_ulna;
+    double camera_y = 2 * normalized_y * tan(vertical_fov_radians / 2) * camera_position_on_ulna;
 
     // Transform the coordinates to the robot's base frame of reference
     double humerus_angle_radians = base_rotation_angle * DEGREES_TO_RADIANS;
