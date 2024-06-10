@@ -21,8 +21,8 @@ elbowAngle = sys.argv[2]
 baseAngle = sys.argv[3]
 gripperHeightRaisedAngle = -140
 gripperHeightLoweredAngle = 150
-fingerCloseAngle = -110
-fingerOpenAngle = 0
+fingerCloseAngle = -100
+fingerOpenAngle = -20
 
 gripperAngle = round(gripperAngle)
 
@@ -56,8 +56,8 @@ sc.goto(dyx_idFingers, fingerOpenAngle, speed=fingerSpeed, degrees=degreesBool)
 time.sleep(2)
 
 
-# #RESET ALL MOTORS
-# sc.goto(dyx_idGripperHeight, 0, speed=fingerSpeed, degrees=degreesBool)
+#RESET ALL MOTORS
+# sc.goto(dyx_idGripperHeight, gripperHeightRaisedAngle, speed=fingerSpeed, degrees=degreesBool)
 # sc.goto(dyx_idGripper, 0, speed=(rotateSpeed), degrees=degreesBool)
 # sc.goto(dyx_idFingers, fingerOpenAngle, speed=fingerSpeed, degrees=degreesBool)
 # time.sleep(2)
