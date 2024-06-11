@@ -132,11 +132,11 @@ double* calculator(double x, double y, double vx, double vy) {
 	double* results = new double[3];
 	std::cout << "external c++ calculator has run with parameters " << x << " " << y << " " << vx << " " << vy << " \n"; //debug log
 
-	Point pointC = calculateRealLifeCoordinates(x,y);
+	Point pointC = calculateRealLifeCoordinates(x,y); //the point where gripper is going to be heading
 	double distanceToTarget = calculateDistanceToTarget(pointC.x,pointC.y); //calculate distance from base to target coordinates
 	if(distanceToTarget > length_humerus + length_ulna || distanceToTarget < length_humerus - length_ulna){
-		std::cout << "\nout of reach\n" << std::endl;
-		return results; //old results
+		std::cout << "\nout of reach\n" << std::endl; //cannot reach the point, return previous, assume object didnt move.
+		return results; //results of previous iteration
 	}
 	double* armAngles = calculateArmAngles(pointC.x,pointC.y,distanceToTarget); // calculate required angles for the elbow and base servos
 	results[0] = calculateGripperAngle(vx,vy);	//calculate angle for the gripper to be perpendicular to the scissors
