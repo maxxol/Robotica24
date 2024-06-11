@@ -9,7 +9,7 @@ dyx_idGripper = 6
 dyx_idFingers = 14
 dyx_idGripperHeight = 1
 dyx_idElbow = 18
-dyx_idBase = 3
+dyx_idBase = 3 #TODO this ID is a stand-in
 
 rotateSpeed = 100 #half of max speed
 fingerSpeed = 200
