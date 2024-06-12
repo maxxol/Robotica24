@@ -30,8 +30,8 @@ class KleurenStand:
         self.geel_onderste = np.array([20, 100, 100], np.uint8)
         self.geel_bovenste = np.array([30, 255, 255], np.uint8)
 
-        self.grijs_onderste = np.array([0, 0, 75], np.uint8)
-        self.grijs_bovenste = np.array([179, 50, 200], np.uint8)
+        self.grijs_onderste = np.array([0, 0, 100], np.uint8)
+        self.grijs_bovenste = np.array([180, 50, 255], np.uint8)
 
         self.kernel = np.ones((5, 5), "uint8")
 
@@ -72,10 +72,6 @@ class KleurenStand:
         self.frame = frame
         # self.frame = cv2.addWeighted(frame, 1.5, np.zeros(frame.shape, frame.dtype), 0, 0)
 
-        # Debugging voor het herkennen van silver/grijs
-        # cv2.imshow("afbeelding", self.frame)
-        # cv2.waitKey(0)
-
         masker, grijs_frame = self.maak_masker(self.frame, kleur)
 
         self.vind_objecten(masker, kleur, grijs_frame)
@@ -108,8 +104,15 @@ class KleurenStand:
 
         match kleur:
             case 'grijs':
+                # blurred_frame = cv2.blur(frame, (5, 5))
+                # cv2.imshow("blurred frame", blurred_frame)
+                frame2 = cv2.addWeighted(frame, 1.5, np.zeros(frame.shape, frame.dtype), 0, 0)
+                cv2.imshow("blurred frame", frame2)
+
                 grijs_mask = cv2.inRange(hsv_frame, self.grijs_onderste, self.grijs_bovenste)
                 grijs_mask = cv2.dilate(grijs_mask, self.kernel)
+                cv2.imshow("grijs mask", grijs_mask)
+                cv2.waitKey(0)
                 return grijs_mask, grijs_frame
             case 'rood':
                 rood_mask1 = cv2.inRange(hsv_frame, self.rood_onderste, self.rood_bovenste)
@@ -285,13 +288,13 @@ class KleurenStand:
             # is het een rechte tang. Anders een kromme tang.
             # Eventueel zou het aantal graden van de kromme tang nauwkeuriger gemaakt kunnen worden.
             if 85 <= angle <= 95:
-                #print("rechte tang" + " " + str(angle))
+                print("rechte tang" + " " + str(angle))
                 return "rechteTang"
             if angle < 85:
-                #print("kromme tang" + " " + str(angle))
+                print("kromme tang" + " " + str(angle))
                 return "krommeTang"
             else:
-                #print("idk")
+                print("idk")
                 return "idk"
 
     def bereken_hoek(self, middle_line, angle_line):

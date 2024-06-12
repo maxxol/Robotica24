@@ -9,12 +9,12 @@ class Camera:
 
     def zet_camera_aan(self):
         # Hierin wordt de camera aangezet
-        camera = cv2.VideoCapture(0) 
-        #print("done")
+        camera = cv2.VideoCapture(0)
+        print("done")
         # camera.set(cv2.CAP_PROP_FPS, self.fps)
 
         current_fps = camera.get(cv2.CAP_PROP_FPS)
-        #print("Current FPS:", current_fps)
+        print("Current FPS:", current_fps)
         return camera
 
     def zet_camera_uit(self, cap):
