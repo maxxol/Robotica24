@@ -46,7 +46,7 @@ int main() {
             std::cerr << "Not enough numbers found in the output!" << std::endl;
         }
 
-        double* calcResults = calculator(computerVisionResults[0], computerVisionResults[1], computerVisionResults[2], computerVisionResults[3],computerVisionResults[4]); // give the calculator the values from computer vision
+        double* calcResults = calculator(computerVisionResults[0], computerVisionResults[1], computerVisionResults[2], computerVisionResults[3]); // give the calculator the values from computer vision
 
         commandRotateServos = commandRotateServos + " " + std::to_string(calcResults[0]) + " " + std::to_string(calcResults[1]) + " " + std::to_string(calcResults[2]); // append the parameter arguments to the servo python script call
         system(commandRotateServos.c_str()); // call the servo python script

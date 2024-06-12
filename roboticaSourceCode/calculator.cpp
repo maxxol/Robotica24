@@ -128,19 +128,9 @@ double* calculateArmAngles(double x,double y,double distanceToTarget){ //x and y
 }
 
 //run all the previous calculation
-double* calculator(bool manual, double x, double y, double vx, double vy) {
+double* calculator(double x, double y, double vx, double vy) {
 	double* results = new double[3];
 	std::cout << "external c++ calculator has run with parameters " << x << " " << y << " " << vx << " " << vy << " \n"; //debug log
-
-	if(manual){
-
-		return results;
-	}
-
-
-
-
-	
 
 	Point pointC = calculateRealLifeCoordinates(x,y); //the point where gripper is going to be heading
 	double distanceToTarget = calculateDistanceToTarget(pointC.x,pointC.y); //calculate distance from base to target coordinates
