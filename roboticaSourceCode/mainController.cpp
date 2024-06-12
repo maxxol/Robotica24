@@ -10,7 +10,7 @@
 int main() {
     std::cout << "main c++ program running-------------------------------------------------" << std::endl;
 
-    std::array<double, 4> computerVisionResults; // empty array for computer vision results
+    std::array<double, 5> computerVisionResults; // empty array for computer vision results
 
     while(true) {
         std::string pythonFilepath = "python3 /home/rob8/Robotica24/roboticaSourceCode/python/"; // general filepath for the python scripts
@@ -36,17 +36,17 @@ int main() {
         std::sregex_iterator end;
 
         size_t index = 0;
-        while (iter != end && index < 4) {
+        while (iter != end && index < 5) {
             computerVisionResults[index] = std::stod((*iter).str());
             ++iter;
             ++index;
         }
 
-        if (index < 4) {
+        if (index < 5) {
             std::cerr << "Not enough numbers found in the output!" << std::endl;
         }
 
-        double* calcResults = calculator(computerVisionResults[0], computerVisionResults[1], computerVisionResults[2], computerVisionResults[3]); // give the calculator the values from computer vision
+        double* calcResults = calculator(computerVisionResults[0], computerVisionResults[1], computerVisionResults[2], computerVisionResults[3],computerVisionResults[4]); // give the calculator the values from computer vision
 
         commandRotateServos = commandRotateServos + " " + std::to_string(calcResults[0]) + " " + std::to_string(calcResults[1]) + " " + std::to_string(calcResults[2]); // append the parameter arguments to the servo python script call
         system(commandRotateServos.c_str()); // call the servo python script

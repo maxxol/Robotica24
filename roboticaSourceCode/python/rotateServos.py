@@ -48,44 +48,44 @@ sc = Connection(port="/dev/serial0",baudrate=1000000, rpi_gpio=True)
 #sc.pretty_print_control_table(dyx_idFingers)
 
 
-sc.goto(dyx_idGripperHeight, gripperHeightLoweredAngle, speed=rotateSpeed, degrees=degreesBool)
-sc.goto(dyx_idGripper, gripperAngle, speed=rotateSpeed, degrees=degreesBool)
-time.sleep(2)
+# sc.goto(dyx_idGripperHeight, gripperHeightLoweredAngle, speed=rotateSpeed, degrees=degreesBool)
+# sc.goto(dyx_idGripper, gripperAngle, speed=rotateSpeed, degrees=degreesBool)
+# time.sleep(2)
 
-sc.goto(dyx_idFingers, fingerCloseAngle, speed=fingerSpeed, degrees=degreesBool)
-time.sleep(2)
+# sc.goto(dyx_idFingers, fingerCloseAngle, speed=fingerSpeed, degrees=degreesBool)
+# time.sleep(2)
 
-sc.goto(dyx_idGripperHeight, gripperHeightRaisedAngle , speed=rotateSpeed, degrees=degreesBool)
-sc.goto(dyx_idGripper, 0, speed=rotateSpeed, degrees=degreesBool)
-time.sleep(2)
+# sc.goto(dyx_idGripperHeight, gripperHeightRaisedAngle , speed=rotateSpeed, degrees=degreesBool)
+# sc.goto(dyx_idGripper, 0, speed=rotateSpeed, degrees=degreesBool)
+# time.sleep(2)
 
-sc.goto(dyx_idFingers, fingerOpenAngle, speed=fingerSpeed, degrees=degreesBool)
-time.sleep(2)
+# sc.goto(dyx_idFingers, fingerOpenAngle, speed=fingerSpeed, degrees=degreesBool)
+# time.sleep(2)
 
 
-'''
+
 #ALL JOINT MODE 
 sc.set_cw_angle_limit(dyx_idGripper, -150, degrees=True)
-time.sleep(1)
+#time.sleep(1)
 #SC.write_data(servo_idx, pk.CCW_ANGLE_LIMIT, 0)
 sc.set_ccw_angle_limit(dyx_idGripper, 150, degrees=True)
-time.sleep(1)
+#time.sleep(1)
 
 sc.set_cw_angle_limit(dyx_idFingers, -150, degrees=True)
-time.sleep(1)
+#time.sleep(1)
 #SC.write_data(servo_idx, pk.CCW_ANGLE_LIMIT, 0)
 sc.set_ccw_angle_limit(dyx_idFingers, 150, degrees=True)
-time.sleep(1)
-'''
+#time.sleep(1)
 
-'''
+
+
 #RESET ALL MOTORS
 sc.goto(dyx_idGripperHeight, gripperHeightRaisedAngle, speed=fingerSpeed, degrees=degreesBool)
 sc.goto(dyx_idGripper, 0, speed=(rotateSpeed), degrees=degreesBool)
 sc.goto(dyx_idFingers, fingerOpenAngle, speed=fingerSpeed, degrees=degreesBool)
 sc.goto(dyx_idElbow, 0, speed=rotateSpeed, degrees=degreesBool)
-time.sleep(2)
-'''
+#time.sleep(2)
+
 
 '''
 #elbow rotate

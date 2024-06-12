@@ -34,7 +34,7 @@ double camera_position_on_ulna = 30.0; // Distance from elbow joint to camera on
 double camera_height_from_ground = 49.0; // Height of the camera from the ground in units
 
 //camera specifications
-const double camera_fov = 55.0; // Diagonal FOV in degrees
+const double camera_fov = 61.0; // Diagonal FOV in degrees
 const int camera_width = 640; // Camera resolution width in pixels
 const int camera_height = 480; // Camera resolution height in pixels
 
@@ -89,7 +89,7 @@ Point calculateRealLifeCoordinates(int screen_x, int screen_y) {
 	object.x = camera_mount.x + object_x_relative;
 	object.y = camera_mount.y + object_y_relative;
 
-	//std::cout << object.x << " " << object.y << std::endl; //debug log
+	std::cout << object.x << " " << object.y << std::endl; //debug log
 	return object;
 }
 
@@ -128,9 +128,19 @@ double* calculateArmAngles(double x,double y,double distanceToTarget){ //x and y
 }
 
 //run all the previous calculation
-double* calculator(double x, double y, double vx, double vy) {
+double* calculator(bool manual, double x, double y, double vx, double vy) {
 	double* results = new double[3];
 	std::cout << "external c++ calculator has run with parameters " << x << " " << y << " " << vx << " " << vy << " \n"; //debug log
+
+	if(manual){
+
+		return results;
+	}
+
+
+
+
+	
 
 	Point pointC = calculateRealLifeCoordinates(x,y); //the point where gripper is going to be heading
 	double distanceToTarget = calculateDistanceToTarget(pointC.x,pointC.y); //calculate distance from base to target coordinates
