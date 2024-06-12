@@ -75,7 +75,7 @@ class KleurenStand:
         masker, grijs_frame = self.maak_masker(self.frame, kleur)
 
         self.vind_objecten(masker, kleur, grijs_frame)
-
+        cv2.imwrite("/home/rob8/Robotica24/roboticaSourceCode/python/pyIMG/schaarRechtThresh.jpg", masker)
         if len(self.objecten.nieuw) == 0 or None:
             self.objecten.verwijder_object()
 
@@ -97,6 +97,8 @@ class KleurenStand:
             frame (string/image): Het frame bevat een pad naar een afbeelding of geeft een frame mee van de camera.
             kleur (string): De kleur die van het object dat herkent moet worden.
         """
+
+        #frame = cv2.GaussianBlur(frame, (7, 7), 0)
 
         hsv_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
@@ -159,6 +161,12 @@ class KleurenStand:
                     type_object = self.object_herkenning(rect, self.angle_line, grijs_frame)
                     cx, cy = self.centroid(contour)
                     vx, vy, x, y = cv2.fitLine(contour, cv2.DIST_L2, 0, 0.01, 0.01)
+
+                    # Draw fitline here on self.frame
+                    rows, cols = self.frame.shape[:2]
+                    lefty = int((-x * vy / vx) + y)
+                    righty = int(((cols - x) * vy / vx) + y)
+                    cv2.line(self.frame, (cols - 1, righty), (0, lefty), (0, 255, 0), 2)
 
                     if type_object is not None:
                         if self.objecten.nieuw != {}:

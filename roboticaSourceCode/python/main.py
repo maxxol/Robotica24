@@ -4,10 +4,11 @@ from TargetStand import TargetStand
 from DataSender import DataSender
 import cv2
 
-stand = 2
+from bluetooth_test import connect_rfcomm, read_signed_integers
+import serial
 
 
-def main(name):
+def main():
     """
     De main functie. De robot heeft 7 verschillende standen waarin het kan schakelen;
     Manual, Target en elk van de kleuren een eigen stand.
@@ -15,28 +16,56 @@ def main(name):
     Parameters:
         name (str): 'PyCharm'
     """
+    
+
     aan = True
-    camera = Camera(10.0, 1920, 1080)
+    camera = Camera(10.0, 480, 360)
     cap = camera.zet_camera_aan()
     ds = DataSender()
     ks = KleurenStand()
     ts = TargetStand()
 
+
+#bluetooth ophalen
+    # stand = 5
+
+
+    data = (1,0,0,0,0,0,0,0)  #mock data
+    connect_rfcomm()
+    try: 
+        print("Opening serial port...")
+        ser = serial.Serial("/dev/rfcomm0", baudrate=115200, timeout=1)
+        print("Serial port opened successfully")
+        data = read_signed_integers()
+
+    except serial.SerialException as se:
+        print(f"Serial Exception: {str(se)}")
+    finally:
+        if ser.is_open:
+            ser.close()
+            print("Serial port closed")
+
+    print(data)
+    stand = data[0]
+
+
     match stand:
         case 1:
-            print('robot staat in manual stand')
+            
+            #print('robot staat in manual stand')
+            
             return
         case 2:
-            _, frame = cap.read()
-            # frame = r'C:\Users\thoma\PycharmProjects\Computer_Vision\backups\Silverblokje\20240606_114441.jpg'
-            target = ts.add_contours(frame)
+            # _, frame = cap.read()
+            frame = r'C:\Users\thoma\PycharmProjects\Computer_Vision\20240604_135023.jpg'
+            target = ts.vind_target(frame)
             if target:
                 ds.verstuur_target_coordinaten(target)
             return
         case 3:
             # _, frame = cap.read()
             # frame = ks.detect(frame)
-            object_data = ks.detect(r'C:\Users\thoma\PycharmProjects\Computer_Vision\backups\Silverblokje\20240606_114441.jpg', 'grijs')
+            object_data = ks.detect(r'C:\Users\thoma\PycharmProjects\Computer_Vision\20240604_135023.jpg', 'grijs')
             if object_data:
                 ds.verstuur_object_coordinaten(object_data)
             return
@@ -48,17 +77,13 @@ def main(name):
                 ds.verstuur_object_coordinaten(object_data)
             return
         case 5:
-            # while aan:
             _, frame = cap.read()
+            
             object_data = ks.detect(frame, 'groen')
+            cv2.imwrite("/home/rob8/Robotica24/roboticaSourceCode/python/pyIMG/schaarRecht.jpg", frame)
             # object_data = ks.detect(r'C:\Users\thoma\PycharmProjects\Computer_Vision\20240523_134228.png', 'groen')
             if object_data:
                 ds.verstuur_object_coordinaten(object_data)
-            # cv2.imshow('Webcam Feed', frame)
-
-            # # Press 'q' on the keyboard to exit the loop
-            # if cv2.waitKey(1) & 0xFF == ord('q'):
-            #         return
             return
         case 6:
             # _, frame = cap.read()
@@ -74,7 +99,7 @@ def main(name):
             if object_data:
                 ds.verstuur_object_coordinaten(object_data)
             return
-    return print('Geen stand geselecteerd')
+    return #print('Geen stand geselecteerd')
 
 
 def verander_stand(input_controller):
@@ -90,7 +115,7 @@ def verander_stand(input_controller):
 
 
 if __name__ == '__main__':
-    main('PyCharm')
+    main()
 
 # Image paths voor het silvere blokje
 # frame = ks.detect(r'C:\Users\thoma\PycharmProjects\Computer_Vision\Silverblokje\20240606_114432.jpg')
