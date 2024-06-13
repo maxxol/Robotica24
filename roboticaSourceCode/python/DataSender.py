@@ -14,6 +14,3 @@ class DataSender:
     def verstuur_target_coordinaten(self, target_coordinaten):
         print(target_coordinaten[0], target_coordinaten[1])
         return
-
-
-

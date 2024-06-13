@@ -7,4 +7,17 @@ HOW TO USE:
 3. run 'cd Robotica24'
 4. push/pull/commit from this directory using your favourite terminal application.
 
-build command: g++ -std=c++11 mainController.cpp calculator.cpp checkBluetooth.cpp -o mainController
+
+
+*main*:  
+g++ -std=c++11 roboticaSourceCode/mainController.cpp roboticaSourceCode/calculator.cpp roboticaSourceCode/checkBluetooth.cpp -o mainController
+./mainController
+
+
+*scissors*: 
+g++ -std=c++11 hardcoded_scripts/scissors/scissorsController.cpp roboticaSourceCode/calculator.cpp -o scissorsController
+./scissorsController
+
+
+*kilogram*: 
+python3 /home/rob8/Robotica24/hardcoded_scripts/kilo.py

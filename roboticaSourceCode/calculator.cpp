@@ -95,30 +95,48 @@ double calculateDistanceToTarget(int x,int y){
 }
 
 //calculate the needed rotation of the gripper to grab the object while remaining perpendicular to it
-double calculateGripperAngle(double vx, double vy) {
-	//perpendicular direction vector
-	double px = -vy;
-	double py = vx;
-	
-	//calculate the angle with respect to the x-axis
-	double angleRadians = std::atan2(py, px);
-	double angleDegrees = angleRadians * (180.0 / M_PI);
+#include <cmath>
 
-    //account for the dead zone of the servos (<-150 and >150)
-	if (angleDegrees > 150) //if in dead zone
-		angleDegrees-=180; //flip it 180 degrees (same results as the gripper is bilaterally symmetrical)
-	if(angleDegrees < -150)
-		angleDegrees+=180;
-	//std::cout << px << " " << py << " " << angleDegrees << std::endl; //debug log
-	return angleDegrees;
+double calculateGripperAngle(double vx, double vy) {
+    // Perpendicular direction vector
+    double px = -vy;
+    double py = vx;
+
+    // Calculate the angle with respect to the x-axis
+    double angleRadians = std::atan2(py, px);
+    double angleDegrees = angleRadians * (180.0 / M_PI);
+
+    // Normalize angle to be within the range of [-180, 180]
+    if (angleDegrees > 180) {
+        angleDegrees -= 360;
+    } else if (angleDegrees < -180) {
+        angleDegrees += 360;
+    }
+
+    // Account for the dead zone of the servos (<-150 and >150)
+    if (angleDegrees > 150) {
+        angleDegrees -= 180; // Flip 180 degrees
+    } else if (angleDegrees < -150) {
+        angleDegrees += 180; // Flip 180 degrees
+    }
+
+    // Normalize angle again to be within the range of [-150, 150]
+    if (angleDegrees > 150) {
+        angleDegrees -= 360;
+    } else if (angleDegrees < -150) {
+        angleDegrees += 360;
+    }
+
+    return angleDegrees;
 }
+
 
 //calculate the angles of the robot's elbow and base
 double* calculateArmAngles(double x,double y,double distanceToTarget){ //x and y of the center of mass of the object, along with the distance.
 	double* armAngles = new double[2]; //create a pointer towards an array with two decimal numbers
 	//use trigonometry to calculate the angles: see https://www.geogebra.org/calculator/bf4wfqr5 for elaboration
-	armAngles[0] = fmod(((acos((pow(length_humerus, 2) + pow(length_ulna, 2) - pow(distanceToTarget, 2)) / (2 * length_humerus * length_ulna)) + M_PI), (2 * M_PI))*(180/M_PI))*2;//elbow
-	armAngles[1] = fmod(((atan2(y, x) - atan2((length_ulna * sin(armAngles[0])), (length_humerus + length_ulna * cos(armAngles[0])))), (2 * M_PI))*(180/M_PI))*3.33;//base angle, mult by gear ratio
+	armAngles[0] = fmod((acos((pow(length_humerus, 2) + pow(length_ulna, 2) - pow(distanceToTarget, 2)) / (2 * length_humerus * length_ulna)) + M_PI), (2 * M_PI))*(180/M_PI);//elbow
+	armAngles[1] = fmod((atan2(y, x) - atan2((length_ulna * sin(armAngles[0])), (length_humerus + length_ulna * cos(armAngles[0])))), (2 * M_PI))*(180/M_PI);//base angle, mult by gear ratio
 	return armAngles; 
 }
 

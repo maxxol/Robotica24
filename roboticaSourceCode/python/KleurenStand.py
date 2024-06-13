@@ -81,7 +81,7 @@ class KleurenStand:
 
         focus_object = self.objecten.update_positie()
 
-        # self.teken_contouren(self.objecten.oud, self.frame)
+        # self.teken_contouren(self.objecten.focus_object, self.frame)
 
         return focus_object
 
@@ -351,22 +351,22 @@ class KleurenStand:
             objecten: lijst met alle objecten die herkend zijn.
             frame: het plaatje/frame van de camera.
         """
-        for key, value in objecten.items():
-            rect = value[2]
-            box = cv2.boxPoints(rect)
-            box = np.int0(box)
-            kleur = self.get_kleur(value[1])
-            self.frame = cv2.drawContours(frame, [box], -1, kleur, 2)
-            if self.circles is not None:
-                for circle in self.circles:
-                    self.frame = cv2.circle(frame, (circle[0], circle[1]), circle[2], (255, 0, 0), 1)
 
-            cv2.line(frame, self.middle_line[0], self.middle_line[1], (255, 0, 0), 1)
-            cv2.line(frame, self.middle_point, self.angle_line, (255, 0, 0), 1)
-            center = tuple(map(int, rect[0]))
-            # cv2.putText(frame, str(key) + "" + str(value), (center[0], center[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, kleur)
-            cv2.putText(frame, str(key) + "" + str(value[3]), (center[0], center[1] - 10), cv2.FONT_HERSHEY_SIMPLEX,
-                        0.5, kleur)
+        rect = self.objecten.focus_object[2]
+        box = cv2.boxPoints(rect)
+        box = np.int0(box)
+        kleur = self.get_kleur(self.objecten.focus_object[1])
+        self.frame = cv2.drawContours(frame, [box], -1, kleur, 2)
+        if self.circles is not None:
+            for circle in self.circles:
+                self.frame = cv2.circle(frame, (circle[0], circle[1]), circle[2], (255, 0, 0), 1)
+
+        self.frame = cv2.line(self.frame, self.middle_line[0], self.middle_line[1], (255, 0, 0), 1)
+        self.frame = cv2.line(self.frame, self.middle_point, self.angle_line, (255, 0, 0), 1)
+        center = tuple(map(int, rect[0]))
+        # cv2.putText(frame, str(key) + "" + str(value), (center[0], center[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, kleur)
+        self.frame = cv2.putText(self.frame, str(1) + "" + str(self.objecten.focus_object[3]), (center[0], center[1] - 10), cv2.FONT_HERSHEY_SIMPLEX,
+                    0.5, kleur)
 
     def get_kleur(self, kleur):
         """

@@ -51,7 +51,6 @@ int main() {
         commandRotateServos = commandRotateServos + " " + std::to_string(calcResults[0]) + " " + std::to_string(calcResults[1]) + " " + std::to_string(calcResults[2]); // append the parameter arguments to the servo python script call
         system(commandRotateServos.c_str()); // call the servo python script
 
-        checkBluetooth();
 
         std::cout << "main c++ program done-----------------------------------------------------" << std::endl;
     }
