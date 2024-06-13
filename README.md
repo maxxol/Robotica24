@@ -21,3 +21,6 @@ g++ -std=c++11 hardcoded_scripts/scissors/scissorsController.cpp roboticaSourceC
 
 *kilogram*: 
 python3 /home/rob8/Robotica24/hardcoded_scripts/kilo.py
+
+*full ROM*:
+python3 /home/rob8/Robotica24/Robotica24/hardcoded_scripts/rangeOfMotion.py

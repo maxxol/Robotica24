@@ -46,19 +46,19 @@ sc = Connection(port="/dev/serial0",baudrate=1000000, rpi_gpio=True)
 #sc.pretty_print_control_table(dyx_idFingers)
 
 
-# sc.goto(dyx_idGripperHeight, gripperHeightLoweredAngle, speed=rotateSpeed, degrees=degreesBool)
+sc.goto(dyx_idGripperHeight, gripperHeightLoweredAngle, speed=rotateSpeed, degrees=degreesBool)
 sc.goto(dyx_idGripper, gripperAngle, speed=rotateSpeed, degrees=degreesBool)
-# time.sleep(4)
+time.sleep(4)
 
-# sc.goto(dyx_idFingers, fingerCloseAngle, speed=fingerSpeed, degrees=degreesBool)
-# time.sleep(4)
+sc.goto(dyx_idFingers, fingerCloseAngle, speed=fingerSpeed, degrees=degreesBool)
+time.sleep(4)
 
-# sc.goto(dyx_idGripperHeight, gripperHeightRaisedAngle , speed=rotateSpeed, degrees=degreesBool)
-# sc.goto(dyx_idGripper, 0, speed=rotateSpeed, degrees=degreesBool)
-# time.sleep(4)
+sc.goto(dyx_idGripperHeight, gripperHeightRaisedAngle , speed=rotateSpeed, degrees=degreesBool)
+sc.goto(dyx_idGripper, 0, speed=rotateSpeed, degrees=degreesBool)
+time.sleep(4)
 
-# sc.goto(dyx_idFingers, fingerOpenAngle, speed=fingerSpeed, degrees=degreesBool)
-# time.sleep(4)
+sc.goto(dyx_idFingers, fingerOpenAngle, speed=fingerSpeed, degrees=degreesBool)
+time.sleep(4)
 
 
 
