@@ -38,11 +38,6 @@ const double camera_fov = 61.0; // Diagonal FOV in degrees
 const int camera_width = 640; // Camera resolution width in pixels
 const int camera_height = 480; // Camera resolution height in pixels
 
-//struct to represent a point in 2D space
-struct Point {
-	double x;
-	double y;
-};
 
 //calculate the real-life coordinates of the object
 Point calculateRealLifeCoordinates(int screen_x, int screen_y) {

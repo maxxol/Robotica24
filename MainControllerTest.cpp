@@ -17,6 +17,7 @@ int main() {
 
 
     while(true) {
+        double* results = new double[3];
         std::string pythonFilepath = "python3 /home/rob8/Robotica24/roboticaSourceCode/python/"; // general filepath for the python scripts
         std::string commandRotateServos = pythonFilepath + "rotateServos.py"; // servo command script
         
