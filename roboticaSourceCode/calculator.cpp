@@ -117,8 +117,8 @@ double calculateGripperAngle(double vx, double vy) {
 double* calculateArmAngles(double x,double y,double distanceToTarget){ //x and y of the center of mass of the object, along with the distance.
 	double* armAngles = new double[2]; //create a pointer towards an array with two decimal numbers
 	//use trigonometry to calculate the angles: see https://www.geogebra.org/calculator/bf4wfqr5 for elaboration
-	armAngles[0] = fmod((acos((pow(length_humerus, 2) + pow(length_ulna, 2) - pow(distanceToTarget, 2)) / (2 * length_humerus * length_ulna)) + M_PI), (2 * M_PI))*(180/M_PI);
-	armAngles[1] = fmod((atan2(y, x) - atan2((length_ulna * sin(armAngles[0])), (length_humerus + length_ulna * cos(armAngles[0])))), (2 * M_PI))*(180/M_PI);
+	armAngles[0] = fmod(((acos((pow(length_humerus, 2) + pow(length_ulna, 2) - pow(distanceToTarget, 2)) / (2 * length_humerus * length_ulna)) + M_PI), (2 * M_PI))*(180/M_PI))*2;//elbow
+	armAngles[1] = fmod(((atan2(y, x) - atan2((length_ulna * sin(armAngles[0])), (length_humerus + length_ulna * cos(armAngles[0])))), (2 * M_PI))*(180/M_PI))*3.33;//base angle, mult by gear ratio
 	return armAngles; 
 }
 
