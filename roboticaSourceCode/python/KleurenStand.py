@@ -27,11 +27,11 @@ class KleurenStand:
         self.blauw_onderste = np.array([100, 100, 100], np.uint8)
         self.blauw_bovenste = np.array([130, 255, 255], np.uint8)
 
-        self.geel_onderste = np.array([20, 100, 100], np.uint8)
-        self.geel_bovenste = np.array([30, 255, 255], np.uint8)
+        self.magenta_onderste = np.array([150, 100, 100], np.uint8)
+        self.magenta_bovenste = np.array([175, 255, 255], np.uint8)
 
-        self.grijs_onderste = np.array([0, 0, 100], np.uint8)
-        self.grijs_bovenste = np.array([180, 50, 255], np.uint8)
+        # self.grijs_onderste = np.array([0, 0, 0], np.uint8)
+        # self.grijs_bovenste = np.array([160, 30, 200], np.uint8)
 
         self.kernel = np.ones((5, 5), "uint8")
 
@@ -64,26 +64,26 @@ class KleurenStand:
         """
 
         # Als je de objectherkenning wilt testen op een image path, dan kan je dit hieronder gebruiken. Anders #.
-        # frame = cv2.imread(frame)
-        # scale_factor = 0.2
-        # frame = cv2.resize(frame, None, fx=scale_factor, fy=scale_factor)
+        frame = cv2.imread(frame)
+        scale_factor = 0.2
+        frame = cv2.resize(frame, None, fx=scale_factor, fy=scale_factor)
         # frame = cv2.rotate(frame, cv2.ROTATE_180)
 
         self.frame = frame
-        # self.frame = cv2.addWeighted(frame, 1.5, np.zeros(frame.shape, frame.dtype), 0, 0)
 
         masker, grijs_frame = self.maak_masker(self.frame, kleur)
 
         self.vind_objecten(masker, kleur, grijs_frame)
-        cv2.imwrite("/home/rob8/Robotica24/roboticaSourceCode/python/pyIMG/schaarRechtThresh.jpg", masker)
+
         if len(self.objecten.nieuw) == 0 or None:
             self.objecten.verwijder_object()
+        else:
+            focus_object = self.objecten.update_positie()
+            self.teken_contouren(focus_object, frame)
+            return focus_object
+        return
 
-        focus_object = self.objecten.update_positie()
-
-        # self.teken_contouren(self.objecten.focus_object, self.frame)
-
-        return focus_object
+        # self.teken_contouren(self.objecten.oud, self.frame)
 
         # Geeft een mask terug voor debugging
         # return self.masks['grijs']
@@ -98,21 +98,39 @@ class KleurenStand:
             kleur (string): De kleur die van het object dat herkent moet worden.
         """
 
-        #frame = cv2.GaussianBlur(frame, (7, 7), 0)
-
         hsv_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
         grijs_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
         match kleur:
             case 'grijs':
-                # blurred_frame = cv2.blur(frame, (5, 5))
-                # cv2.imshow("blurred frame", blurred_frame)
-                frame2 = cv2.addWeighted(frame, 1.5, np.zeros(frame.shape, frame.dtype), 0, 0)
-                cv2.imshow("blurred frame", frame2)
+                # saturation = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV)[:, :, 1]
+                # blur = cv2.GaussianBlur(saturation, (3, 3), 0)
+                # thresh = 255 - cv2.threshold(blur, 60, 255, cv2.THRESH_BINARY)[1]
+                # grijs_mask = cv2.dilate(thresh, self.kernel, iterations=1)
 
-                grijs_mask = cv2.inRange(hsv_frame, self.grijs_onderste, self.grijs_bovenste)
-                grijs_mask = cv2.dilate(grijs_mask, self.kernel)
+                gray = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV)[:, :, 1]
+                blur = cv2.GaussianBlur(gray, (26, 26), 0)
+                thresh = cv2.adaptiveThreshold(blur, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 51, 7)
+                grijs_mask = cv2.dilate(thresh, self.kernel, iterations=1)
+
+                # frame2 = cv2.GaussianBlur(hsv_frame, (9, 9), 0)
+                # # cv2.imshow("blurred frame", blurred_frame)
+                # # frame2 = cv2.addWeighted(frame2, 1.5, np.zeros(frame.shape, frame.dtype), 0, 0)
+                # frame3 = cv2.GaussianBlur(frame, (9, 9), 0)
+                # # frame3 = cv2.addWeighted(frame3, 1.5, np.zeros(frame.shape, frame.dtype), 0, 0)
+                #
+                # # cv2.imshow("blurred frame", frame3)
+                #
+                # grijs_mask = cv2.inRange(frame2, self.grijs_onderste, self.grijs_bovenste)
+                #
+                # # # Apply morphological closing to fill holes
+                # # grijs_mask = cv2.morphologyEx(grijs_mask, cv2.MORPH_CLOSE, np.ones((15, 15), "uint8"))
+                # grijs_mask = cv2.dilate(grijs_mask, self.kernel)
+                # # grijs_mask = cv2.erode(grijs_mask, self.kernel, iterations=1)
+                #
+                # # grijs_mask = cv2.medianBlur(grijs_mask, 5)
+                cv2.imshow("frame", frame)
                 cv2.imshow("grijs mask", grijs_mask)
                 cv2.waitKey(0)
                 return grijs_mask, grijs_frame
@@ -132,9 +150,14 @@ class KleurenStand:
                 return blauw_mask, grijs_frame
             case 'magenta':
                 # moet nog aangepast worden naar magenta.
-                geel_mask = cv2.inRange(hsv_frame, self.geel_onderste, self.geel_bovenste)
-                geel_mask = cv2.dilate(geel_mask, self.kernel)
-                return geel_mask, grijs_frame
+                magenta_mask = cv2.inRange(hsv_frame, self.magenta_onderste, self.magenta_bovenste)
+                magenta_mask = cv2.dilate(magenta_mask, self.kernel)
+
+                # cv2.imshow("fasff", frame)
+                cv2.imshow("fasf", magenta_mask)
+                cv2.waitKey(0)
+
+                return magenta_mask, grijs_frame
 
     def vind_objecten(self, masker, kleur, grijs_frame):
         """
@@ -155,18 +178,11 @@ class KleurenStand:
                 area = cv2.contourArea(contour)
 
                 if area > self.min_area:
-                    verste_punt = self.verst_liggende_punt(contour)
-                    self.angle_line = verste_punt
+                    # self.angle_line = verste_punt
                     rect = cv2.minAreaRect(contour)
-                    type_object = self.object_herkenning(rect, self.angle_line, grijs_frame)
+                    type_object = self.object_herkenning(rect, contour, grijs_frame)
                     cx, cy = self.centroid(contour)
                     vx, vy, x, y = cv2.fitLine(contour, cv2.DIST_L2, 0, 0.01, 0.01)
-
-                    # Draw fitline here on self.frame
-                    rows, cols = self.frame.shape[:2]
-                    lefty = int((-x * vy / vx) + y)
-                    righty = int(((cols - x) * vy / vx) + y)
-                    cv2.line(self.frame, (cols - 1, righty), (0, lefty), (0, 255, 0), 2)
 
                     if type_object is not None:
                         if self.objecten.nieuw != {}:
@@ -187,14 +203,11 @@ class KleurenStand:
             cy = 0
         return cx, cy
 
-
-
     def verst_liggende_punt(self, contour):
         """
-        Er wordt hier het hoogste punt van de tang gevonden, wat nodig is voor het object herkenning.
-        Er wordt berekend welke van de 4 verste punten van het object het meest van de andere ligt.
-        Dit punt is altijd de top van de tang. 
-        Omdat de rotatie van de tang niet altijd duidelijk is, kan je zo altijd het goede punt vinden
+        Er wordt hier het verste punt van de tang gevonden, wat nodig is voor het object herkenning.
+        Er wordt berekend welke van de 4 verste punten van het object het meest van de middenpunt ligt.
+        Dit punt is altijd de punt van de tang.
 
         Parameters:
             contour: Een contour.
@@ -211,19 +224,57 @@ class KleurenStand:
         self.frame = cv2.circle(self.frame, top, 5, (255, 0, 0), -1)
         self.frame = cv2.circle(self.frame, bodem, 5, (255, 0, 0), -1)
 
-        # Hier onder wordt de afstand van 1 punt naar de andere punten opgeteld.
-        # De punt die het verst van de andere punten liggen is altijd de punt van de tang.
-        punten = links, rechts, top, bodem
-        totale_afstand = [0, 0, 0, 0]
+        # Gebruik de gegeven middenpunt
+        middenpunt = self.middle_point
 
-        for i in range(len(punten)):
-            for j in range(i + 1, len(punten)):
-                afstand = self.euclidean_distance(punten[i], punten[j])
-                totale_afstand[i] += afstand
-                totale_afstand[j] += afstand
+        # Teken de middenpunt voor debugging
+        self.frame = cv2.circle(self.frame, middenpunt, 5, (0, 255, 255), -1)
 
-        verste_punt = totale_afstand.index(max(totale_afstand))
-        return punten[verste_punt]
+        # Hier onder wordt de afstand van de middenpunt naar de verste punten berekend.
+        # De punt die het verst van de middenpunt ligt is altijd de punt van de tang.
+        punten = [links, rechts, top, bodem]
+        afstanden = [self.euclidean_distance(middenpunt, punt) for punt in punten]
+
+        verste_punt_index = np.argmax(afstanden)
+        verste_punt = punten[verste_punt_index]
+
+        return verste_punt
+
+    # def verst_liggende_punt(self, contour):
+    #     """
+    #     Er wordt hier het hoogste punt van de tang gevonden, wat nodig is voor het object herkenning.
+    #     Er wordt berekend welke van de 4 verste punten van het object het meest van de andere ligt.
+    #     Dit punt is altijd de top van de tang.
+    #     Omdat de rotatie van de tang niet altijd duidelijk is, kan je zo altijd het goede punt vinden
+    #
+    #     Parameters:
+    #         contour: Een contour.
+    #     """
+    #     # De vier variabelen hieronder zijn de verste punten gevonden in de contour van de tang.
+    #     links = tuple(contour[contour[:, :, 0].argmin()][0])
+    #     rechts = tuple(contour[contour[:, :, 0].argmax()][0])
+    #     top = tuple(contour[contour[:, :, 1].argmin()][0])
+    #     bodem = tuple(contour[contour[:, :, 1].argmax()][0])
+    #
+    #     # De punten worden hier getekend voor debugging.
+    #     self.frame = cv2.circle(self.frame, links, 5, (255, 0, 0), -1)
+    #     self.frame = cv2.circle(self.frame, rechts, 5, (255, 0, 0), -1)
+    #     self.frame = cv2.circle(self.frame, top, 5, (255, 0, 0), -1)
+    #     self.frame = cv2.circle(self.frame, bodem, 5, (255, 0, 0), -1)
+    #
+    #     # Hier onder wordt de afstand van 1 punt naar de andere punten opgeteld.
+    #     # De punt die het verst van de andere punten liggen is altijd de punt van de tang.
+    #     punten = links, rechts, top, bodem
+    #     totale_afstand = [0, 0, 0, 0]
+    #
+    #     for i in range(len(punten)):
+    #         for j in range(i + 1, len(punten)):
+    #             afstand = self.euclidean_distance(punten[i], punten[j])
+    #             totale_afstand[i] += afstand
+    #             totale_afstand[j] += afstand
+    #
+    #     verste_punt = totale_afstand.index(max(totale_afstand))
+    #     return punten[verste_punt]
 
     def euclidean_distance(self, p1, p2):
         """
@@ -232,9 +283,9 @@ class KleurenStand:
         Parameters:
             p1 & p2: Twee punten
         """
-        return math.sqrt((p2[0] - p1[0]) ** 2 + (p2[1] - p1[1]) ** 2)
+        return np.sqrt((p2[0] - p1[0]) ** 2 + (p2[1] - p1[1]) ** 2)
 
-    def object_herkenning(self, rect, verste_punt, grijs_frame):
+    def object_herkenning(self, rect, contour, grijs_frame):
         """
         Hier wordt de objectherkenning gedaan.
         Er wordt binnen de regio van de contour (x/y-1/2) gezocht naar cirkels.
@@ -289,6 +340,9 @@ class KleurenStand:
             self.middle_line = (center1, center2)
             self.middle_point = (center1 + center2) // 2
 
+            verste_punt = self.verst_liggende_punt(contour)
+            self.angle_line = verste_punt
+
             # Angle is de hoek tussen het punt van het object naar het middenpunt van de cirkels
             angle = self.bereken_hoek(self.middle_line, (self.middle_point, self.angle_line))
 
@@ -296,13 +350,13 @@ class KleurenStand:
             # is het een rechte tang. Anders een kromme tang.
             # Eventueel zou het aantal graden van de kromme tang nauwkeuriger gemaakt kunnen worden.
             if 85 <= angle <= 95:
-                print("rechte tang" + " " + str(angle))
+                # print("rechte tang" + " " + str(angle))
                 return "rechteTang"
             if angle < 85:
-                print("kromme tang" + " " + str(angle))
+                # print("kromme tang" + " " + str(angle))
                 return "krommeTang"
             else:
-                print("idk")
+                # print("idk")
                 return "idk"
 
     def bereken_hoek(self, middle_line, angle_line):
@@ -361,12 +415,13 @@ class KleurenStand:
             for circle in self.circles:
                 self.frame = cv2.circle(frame, (circle[0], circle[1]), circle[2], (255, 0, 0), 1)
 
-        self.frame = cv2.line(self.frame, self.middle_line[0], self.middle_line[1], (255, 0, 0), 1)
-        self.frame = cv2.line(self.frame, self.middle_point, self.angle_line, (255, 0, 0), 1)
+        cv2.line(frame, self.middle_line[0], self.middle_line[1], (255, 0, 0), 1)
+        cv2.line(frame, self.middle_point, self.angle_line, (255, 0, 0), 1)
         center = tuple(map(int, rect[0]))
         # cv2.putText(frame, str(key) + "" + str(value), (center[0], center[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, kleur)
-        self.frame = cv2.putText(self.frame, str(1) + "" + str(self.objecten.focus_object[3]), (center[0], center[1] - 10), cv2.FONT_HERSHEY_SIMPLEX,
+        cv2.putText(frame, str(1) + "" + str(self.objecten.focus_object[3]), (center[0], center[1] - 10), cv2.FONT_HERSHEY_SIMPLEX,
                     0.5, kleur)
+
 
     def get_kleur(self, kleur):
         """
@@ -381,6 +436,6 @@ class KleurenStand:
                 return 0, 255, 0
             case 'blauw':
                 return 255, 0, 0
-            case 'geel':
+            case 'magenta':
                 return 0, 255, 255
         return 255, 255, 255

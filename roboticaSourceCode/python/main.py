@@ -3,57 +3,42 @@ from KleurenStand import KleurenStand
 from TargetStand import TargetStand
 from DataSender import DataSender
 import cv2
+from bluetooth import BluetoothHandler
 
-from bluetooth_test import connect_rfcomm, read_signed_integers
+#from bluetooth import connect_rfcomm, read_signed_integers
 import serial
+
+# rfcomm_port = "/dev/rfcomm0"
+# connect_script = "../shell/connect_rfcomm.sh"
+# disconnect_script = "../shell/disconnect_rfcomm.sh"
+
+# bt = BluetoothHandler(rfcomm_port, connect_script, disconnect_script)
+# try:
+#     while True:
+#         data = bt.read_data()
+#         print(data)
+#         process_data(data)
+# except KeyboardInterrupt:
+#     print("Program interrupted by user")
+#     #Close connection 
+#     bt.close()
+#     bt.disconnect()
 
 
 def main():
-    """
-    De main functie. De robot heeft 7 verschillende standen waarin het kan schakelen;
-    Manual, Target en elk van de kleuren een eigen stand.
-
-    Parameters:
-        name (str): 'PyCharm'
-    """
     
-
     aan = True
-    camera = Camera(10.0, 480, 360)
-    cap = camera.zet_camera_aan()
+    camera_index = 0
+    cam = cv2.VideoCapture(camera_index)
     ds = DataSender()
     ks = KleurenStand()
     ts = TargetStand()
 
-
-#bluetooth ophalen
-    # stand = 5
-
-
-    data = (1,0,0,0,0,0,0,0)  #mock data
-    connect_rfcomm()
-    try: 
-        print("Opening serial port...")
-        ser = serial.Serial("/dev/rfcomm0", baudrate=115200, timeout=1)
-        print("Serial port opened successfully")
-        data = read_signed_integers()
-
-    except serial.SerialException as se:
-        print(f"Serial Exception: {str(se)}")
-    finally:
-        if ser.is_open:
-            ser.close()
-            print("Serial port closed")
-
-    print(data)
-    stand = data[0]
-
+    stand = 4
 
     match stand:
         case 1:
-            
-            #print('robot staat in manual stand')
-            
+
             return
         case 2:
             # _, frame = cap.read()
@@ -63,39 +48,40 @@ def main():
                 ds.verstuur_target_coordinaten(target)
             return
         case 3:
-            # _, frame = cap.read()
-            # frame = ks.detect(frame)
-            object_data = ks.detect(r'C:\Users\thoma\PycharmProjects\Computer_Vision\20240604_135023.jpg', 'grijs')
+            _, frame = cam.read()
+            frame = ks.detect(frame, "grijs")
+            #cv2.imwrite("/home/rob8/Robotica24/roboticaSourceCode/python/pyIMG/schaarGrijs.jpg", frame)
+            #object_data = ks.detect(r'C:\Users\thoma\PycharmProjects\Computer_Vision\20240604_135023.jpg', 'grijs')
             if object_data:
                 ds.verstuur_object_coordinaten(object_data)
             return
         case 4:
-            # _, frame = cap.read()
-            # frame = ks.detect(frame)
-            object_data = ks.detect(r'C:\Users\thoma\PycharmProjects\Computer_Vision\20240604_135023.jpg', 'rood')
+            _, frame = cam.read()
+            frame = ks.detect(frame, "rood")
+            #cv2.imwrite("/home/rob8/Robotica24/roboticaSourceCode/python/pyIMG/schaarRood.jpg", frame)
+            #object_data = ks.detect(r'C:\Users\thoma\PycharmProjects\Computer_Vision\20240604_135023.jpg', 'rood')
             if object_data:
                 ds.verstuur_object_coordinaten(object_data)
             return
         case 5:
-            _, frame = cap.read()
-            
+            _, frame = cam.read()
             object_data = ks.detect(frame, 'groen')
-            cv2.imwrite("/home/rob8/Robotica24/roboticaSourceCode/python/pyIMG/schaarRecht.jpg", frame)
+            #cv2.imwrite("/home/rob8/Robotica24/roboticaSourceCode/python/pyIMG/schaarGroen.jpg", frame)
             # object_data = ks.detect(r'C:\Users\thoma\PycharmProjects\Computer_Vision\20240523_134228.png', 'groen')
             if object_data:
                 ds.verstuur_object_coordinaten(object_data)
             return
         case 6:
-            # _, frame = cap.read()
-            # frame = ks.detect(frame)
-            object_data = ks.detect(r'C:\Users\thoma\PycharmProjects\Computer_Vision\20240604_135023.jpg', 'blauw')
+            _, frame = cam.read()
+            frame = ks.detect(frame, 'blauw')
+            #object_data = ks.detect(r'C:\Users\thoma\PycharmProjects\Computer_Vision\20240604_135023.jpg', 'blauw')
             if object_data:
                 ds.verstuur_object_coordinaten(object_data)
             return
         case 7:
-            # _, frame = cap.read()
-            # frame = ks.detect(frame)
-            object_data = ks.detect(r'C:\Users\thoma\PycharmProjects\Computer_Vision\20240604_135023.jpg', 'magenta')
+            _, frame = cam.read()
+            frame = ks.detect(frame, 'magenta')
+            #object_data = ks.detect(r'C:\Users\thoma\PycharmProjects\Computer_Vision\20240604_135023.jpg', 'magenta')
             if object_data:
                 ds.verstuur_object_coordinaten(object_data)
             return

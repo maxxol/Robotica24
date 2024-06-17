@@ -28,8 +28,8 @@ const double DEGREES_TO_RADIANS = M_PI / 180.0; //multiplication factor to turn 
 //variables 
 double base_rotation_angle = 90; // Angle between base and humerus in degrees
 double elbow_rotation_angle = 0; // Angle between humerus and ulna in degrees
-double length_humerus = 40.0; // Length of the humerus in units (cm)
-double length_ulna = 33.0; // Length of the ulna in units (cm)
+double length_humerus = 40.5; // Length of the humerus in units (cm)
+double length_ulna = 32.0; // Length of the ulna in units (cm)
 double camera_position_on_ulna = 30.0; // Distance from elbow joint to camera on ulna in units
 double camera_height_from_ground = 49.0; // Height of the camera from the ground in units
 

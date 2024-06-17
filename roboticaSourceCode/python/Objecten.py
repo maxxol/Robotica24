@@ -8,7 +8,7 @@ class Objecten:
             self.focus (list): Het object waar op wordt gefocust
         """
         self.nieuw = {}
-        self.focus_object = []
+        self.focus_object = list()
 
     def update_positie(self):
         """
@@ -28,7 +28,9 @@ class Objecten:
                     dichtste_object = key_nieuw
 
             if dichtste_object is not None:
-                self.focus_object = self.nieuw[dichtste_object]
+                self.focus_object = list(self.focus_object)
+                objects = self.nieuw[dichtste_object]
+                self.focus_object[2] = objects[2]
 
         if not self.focus_object:
             self.verander_focus()
@@ -55,6 +57,7 @@ class Objecten:
 
         if dichtste_object is not None:
             self.focus_object = self.nieuw[dichtste_object]
+
         return self.focus_object
 
     def object_afstand(self, rect1, rect2):
@@ -79,52 +82,3 @@ class Objecten:
         self.focus_object = []
         return
 
-# class Objecten:
-#     def __init__(self):
-#         self.oud = {}
-#         self.nieuw = {}
-#
-#     def update_positie(self):
-#         # Er wordt geen onderscheid gemaakt van kleur, vandaar dat hij niet goed 2 verschillende kleuren tegelijk
-#         # kan tekenen.
-#
-#         if self.oud != {}:
-#             for key_nieuw, value_nieuw in list(self.nieuw.items()):
-#                 closest_key = None
-#                 closest_distance = float('inf')
-#
-#                 for key_oud, value_oud in list(self.oud.items()):
-#                     distance = self.object_distance((value_nieuw[2]), (value_oud[2]))
-#                     if distance < closest_distance and value_nieuw[1] == value_oud[1]:
-#                         closest_distance = distance
-#                         closest_key = key_oud
-#
-#                 if closest_key is not None:
-#                     self.oud[closest_key] = value_nieuw
-#                 else:
-#                     last_item = next(reversed(self.nieuw))
-#                     new_item = int(last_item) + 1
-#                     self.oud.update({new_item: (value_nieuw[0], value_nieuw[1], value_nieuw[2], value_nieuw[3])})
-#         else:
-#             self.oud = self.nieuw
-#             self.nieuw = {}
-#             return self.oud
-#
-#         self.nieuw = {}
-#         return self.oud
-#
-#     def object_distance(self, rect1, rect2):
-#         # Extract the center points from the rectangles
-#         (x1, y1), (w1, h1), angle1 = rect1
-#         (x2, y2), (w2, h2), angle2 = rect2
-#
-#         # Calculate the Euclidean distance between the two center points
-#         return ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5
-#
-#     def remove_object(self, kleur):
-#         if self.oud:
-#             keys_to_remove = [key for key, value in self.oud.items() if value[1] == kleur]
-#             for key in keys_to_remove:
-#                 self.oud.pop(key)
-#         return
-#
