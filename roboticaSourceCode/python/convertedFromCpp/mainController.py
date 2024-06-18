@@ -31,7 +31,7 @@ def main():
 
 				# Give the calculator the values from computer vision
 				calc_results = calculator(computer_vision_results[0], computer_vision_results[1], computer_vision_results[2], computer_vision_results[3])
-				print(f"calc results: {calc_results}")
+				print(f"calc results: {calc_results[0]} {calc_results[1]} {calc_results[2]}")
 				# Call the rotate servos function with the calculated parameters
 				rotate_servos(calc_results[0], calc_results[1], calc_results[2])
 				print("sent servos")
@@ -40,7 +40,7 @@ def main():
 
 				print("main Python program done-----------------------------------------------------")
 			except:
-				print("error")
+				print("error",err)
 
 if __name__ == "__main__":
 	main()

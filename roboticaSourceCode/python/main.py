@@ -8,23 +8,23 @@ from bluetooth import BluetoothHandler
 #from bluetooth import connect_rfcomm, read_signed_integers
 import serial
 
-# rfcomm_port = "/dev/rfcomm0"
-# connect_script = "../shell/connect_rfcomm.sh"
-# disconnect_script = "../shell/disconnect_rfcomm.sh"
+rfcomm_port = "/dev/rfcomm0"
+connect_script = "../shell/connect_rfcomm.sh"
+disconnect_script = "../shell/disconnect_rfcomm.sh"
 
-# bt = BluetoothHandler(rfcomm_port, connect_script, disconnect_script)
-# try:
-#     while True:
-#         data = bt.read_data()
-#         print(data)
-#         process_data(data)
-# except KeyboardInterrupt:
-#     print("Program interrupted by user")
-#     #Close connection 
-#     bt.close()
-#     bt.disconnect()
+bt = BluetoothHandler(rfcomm_port, connect_script, disconnect_script)
+try:
+    while True:
+        data = bt.read_data()
+        print(data)
+        process_data(data)
+except KeyboardInterrupt:
+    print("Program interrupted by user")
+    #Close connection 
+    bt.close()
+    bt.disconnect()
 
-stand = 5
+#stand = 5
 
 
 def main(name, focus_object):

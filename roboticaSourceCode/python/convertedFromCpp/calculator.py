@@ -1,6 +1,6 @@
 import math
 import numpy as np
-
+from getServoPositions import getPosition
 # Constants
 DEGREES_TO_RADIANS = math.pi / 180.0  # Multiplication factor to turn degree values into radian values
 
@@ -21,19 +21,20 @@ DEGREES_TO_RADIANS = math.pi / 180.0  # Multiplication factor to turn degree val
 			[] = special component
 """
 # Variables
-base_rotation_angle = 90  # Angle between base and humerus in degrees
-elbow_rotation_angle = 0  # Angle between humerus and ulna in degrees
+
 
 length_humerus = 40.5  # Length of the humerus in units (cm)
 length_ulna = 32.0  # Length of the ulna in units (cm)
-camera_position_on_ulna = 30.0  # Distance from elbow joint to camera on ulna in units
-camera_height_from_ground = 49.0  # Height of the camera from the ground in units
+camera_position_on_ulna = 20.0  # Distance from elbow joint to camera on ulna in units
+camera_height_from_ground = 43.0  # Height of the camera from the ground in units
 
 # Camera specifications
 camera_fov = 61.0  # Diagonal FOV in degrees
 camera_width = 640  # Camera resolution width in pixels
 camera_height = 480  # Camera resolution height in pixels
 
+id_base = 2
+id_elbow = 18
 class Point:
 	def __init__(self, x=0.0, y=0.0):
 		self.x = x
@@ -41,6 +42,10 @@ class Point:
 
 # Calculate the real-life coordinates of the object
 def calculate_real_life_coordinates(screen_x, screen_y):
+		
+	base_rotation_angle = getPosition(id_base)  # Angle between base and humerus in degrees
+	elbow_rotation_angle = 180-getPosition(id_elbow)  # Angle between humerus and ulna in degrees
+
 	# Convert screen coordinates to normalized coordinates (-1 to 1)
 	normalized_y = (2.0 * screen_x / camera_width) - 1.0
 	normalized_x = 1.0 - (2.0 * screen_y / camera_height)

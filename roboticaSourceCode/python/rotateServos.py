@@ -40,7 +40,7 @@ def rotate_servos(gripperAngle, elbowAngle, baseAngle):
 	gripperAngle = round(gripperAngle)
 	elbowAngle = round(elbowAngle)
 	baseAngle = round(baseAngle)
-
+	print(f"rounded: {gripperAngle} {elbowAngle} {baseAngle}")
 
 
 	#gripper rotate
