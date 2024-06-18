@@ -2,7 +2,7 @@ import cv2 as cv
 import numpy as np
 from pyax12.connection import Connection
 import RPi.GPIO as gpio
-def main():
+def get_computer_vision_results():
 	GREEN_SCISSOR = True
 
 	def colorRange(hsv, color_name):
@@ -76,10 +76,8 @@ def main():
 	# sc = Connection(port="/dev/serial0",baudrate=1000000, rpi_gpio=True)
 	# ellebooghoek = sc.get_present_position(18)
 
-
-	print(f"{cx} {cy} {vx[0]} {vy[0]}")
+	cvResults = [cx ,cy ,vx ,vy]
+	return cvResults
 
 	cam.release()
 
-if __name__ == "__main__":
-	main()

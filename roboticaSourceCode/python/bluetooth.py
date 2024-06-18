@@ -61,25 +61,29 @@ class BluetoothHandler:
     def read_data(self, debug=False):
         controller_data = () #controller data gets stored in this variable as a tuple
         
-        if debug:
-            print(f"serial waiting: {self.serial.in_waiting}")
-
         # Buffer has not received any data yet if serial.in_waiting == 0
         while self.serial.in_waiting == 0:
+            if debug:
+                print(f"serial waiting: {self.serial.in_waiting}")
             pass
         
         # Read 9 bytes of datas
         data = self.serial.read(9)
-        #print(f"Raw Data: {data}")
+        if debug:
+            print(f"Raw Data: {data}")
+
         # if starting byte found, unpack data
         if data[0] == 0xFF:
             data = data[1:]   # Remove starting byte
             controller_data = struct.unpack('8b', data)
-            print(f"Collected data: {controller_data}")
+            if debug:
+                print(f"Collected data: {controller_data}")
         else:
-            print("Flushing input buffer")
+            if debug:
+                print("Flushing input buffer")
+                print(f"buffer size: {self.serial.in_waiting}")
             self.serial.flush() #flush the buffer
-            print(f"buffer size: {self.serial.in_waiting}")
+            
                 
         return controller_data
 
@@ -92,9 +96,6 @@ class BluetoothHandler:
             sub_proc = subprocess.Popen(self.disconnection, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         except Exception as e:
             print(f"Exception: {str(e)}")
-        # finally:
-        #     print("Disconnected from ESP32")
-        #     sub_proc.terminate()
         
 def main():    
     connect_script = "../shell/connect_rfcomm.sh"
@@ -105,7 +106,7 @@ def main():
     try:
         while True:
             data = bt.read_data()
-            #print(data)
+            print(data)
     except KeyboardInterrupt:
         print("Program interrupted by user")
         bt.close()

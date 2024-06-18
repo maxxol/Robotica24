@@ -4,7 +4,7 @@ import RPi.GPIO as gpio
 import time
 
 '''
-picks up a stationary kilogram cylinder that is manually placed underneath the gripper
+picks up a stationary scissors that is manually placed underneath the gripper
 '''
 
 dyx_idGripper = 6 
@@ -13,9 +13,11 @@ dyx_idGripperHeight = 1
 dyx_idElbow = 18
 dyx_idBase = 2
 
-rotateSpeed = 300 #half of max speed
+rotateSpeed = 200 #half of max speed
 fingerSpeed = 200
 degreesBool = True #servos in degree mode
+
+fingerOpenAngle = -20
 
 
 #gripper rotate
@@ -40,10 +42,27 @@ time.sleep(2)
 
 
 
+#RESET ALL MOTORS
+sc.goto(dyx_idGripperHeight, 0, speed=fingerSpeed, degrees=degreesBool)
+sc.goto(dyx_idGripper, 0, speed=(rotateSpeed), degrees=degreesBool)
+sc.goto(dyx_idFingers, fingerOpenAngle, speed=fingerSpeed, degrees=degreesBool)
+sc.goto(dyx_idElbow, 0, speed=rotateSpeed, degrees=degreesBool)
 sc.goto(dyx_idBase, 0, speed=rotateSpeed, degrees=degreesBool)
-time.sleep(5)
+time.sleep(6)
+
+#pick up the kilogram cylinder
+sc.goto(dyx_idElbow, 150, speed=rotateSpeed, degrees=degreesBool)
 sc.goto(dyx_idBase, 150, speed=rotateSpeed, degrees=degreesBool)
-time.sleep(5)
-# sc.goto(dyx_idBase, -150, speed=rotateSpeed, degrees=degreesBool)
-# time.sleep(5)
-# sc.goto(dyx_idBase, 0, speed=rotateSpeed, degrees=degreesBool)
+time.sleep(10)
+
+sc.goto(dyx_idElbow, -150, speed=rotateSpeed, degrees=degreesBool)
+sc.goto(dyx_idBase, -150, speed=rotateSpeed, degrees=degreesBool)
+time.sleep(10)
+
+sc.goto(dyx_idElbow, 0, speed=rotateSpeed, degrees=degreesBool)
+sc.goto(dyx_idBase, 0, speed=rotateSpeed, degrees=degreesBool)
+time.sleep(10)
+
+
+
+

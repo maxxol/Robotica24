@@ -18,16 +18,17 @@ class KleurenStand:
         self.objecten = Objecten()
 
         self.rood_onderste = np.array([0, 150, 100], np.uint8)
-        self.rood_bovenste = np.array([10, 255, 255], np.uint8)
+        self.rood_bovenste = np.array([10, 255, 200], np.uint8)
         self.rood_onderste2 = np.array([170, 150, 100], np.uint8)
-        self.rood_bovenste2 = np.array([180, 255, 255], np.uint8)
+        self.rood_bovenste2 = np.array([180, 255, 180], np.uint8)
+
         self.groen_onderste = np.array([35, 50, 50], np.uint8)
         self.groen_bovenste = np.array([70, 255, 255], np.uint8)
 
         self.blauw_onderste = np.array([100, 100, 100], np.uint8)
         self.blauw_bovenste = np.array([130, 255, 255], np.uint8)
 
-        self.magenta_onderste = np.array([150, 100, 100], np.uint8)
+        self.magenta_onderste = np.array([150, 50, 180], np.uint8)
         self.magenta_bovenste = np.array([175, 255, 255], np.uint8)
 
         # self.grijs_onderste = np.array([0, 0, 0], np.uint8)
@@ -53,7 +54,7 @@ class KleurenStand:
         self.angle_line = None
         self.middle_point = None
 
-    def detect(self, frame, kleur):
+    def detect(self, frame, kleur, focus_object):
         """
         De main van de KleurenStand.
         Hierin staan alle methoden gebruik voor de kleur en object herkenning
@@ -64,14 +65,20 @@ class KleurenStand:
         """
 
         # Als je de objectherkenning wilt testen op een image path, dan kan je dit hieronder gebruiken. Anders #.
-        frame = cv2.imread(frame)
-        scale_factor = 0.2
-        frame = cv2.resize(frame, None, fx=scale_factor, fy=scale_factor)
-        # frame = cv2.rotate(frame, cv2.ROTATE_180)
+        # frame = cv2.imread(frame)
+        # scale_factor = 0.8
+        # frame = cv2.resize(frame, None, fx=scale_factor, fy=scale_factor)
+        # frame = cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
+
+        if focus_object:
+            self.objecten.focus_object = focus_object
 
         self.frame = frame
 
         masker, grijs_frame = self.maak_masker(self.frame, kleur)
+
+        if not isinstance(masker, np.ndarray):
+            return
 
         self.vind_objecten(masker, kleur, grijs_frame)
 
@@ -109,8 +116,15 @@ class KleurenStand:
                 # thresh = 255 - cv2.threshold(blur, 60, 255, cv2.THRESH_BINARY)[1]
                 # grijs_mask = cv2.dilate(thresh, self.kernel, iterations=1)
 
-                gray = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV)[:, :, 1]
-                blur = cv2.GaussianBlur(gray, (26, 26), 0)
+                frame = cv2.GaussianBlur(frame, (21, 21), 0)
+                cv2.imshow('g', frame)
+                cv2.waitKey(0)
+
+                gray = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV)#[:, :, 1]
+                cv2.imshow('j', gray)
+                blur = cv2.GaussianBlur(gray, (21, 21), 0)
+                cv2.imshow('blur', blur)
+                cv2.waitKey(0)
                 thresh = cv2.adaptiveThreshold(blur, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 51, 7)
                 grijs_mask = cv2.dilate(thresh, self.kernel, iterations=1)
 
@@ -139,7 +153,26 @@ class KleurenStand:
                 rood_mask2 = cv2.inRange(hsv_frame, self.rood_onderste2, self.rood_bovenste2)
                 rood_mask = cv2.bitwise_or(rood_mask1, rood_mask2)
                 rood_mask = cv2.dilate(rood_mask, self.kernel)
-                return rood_mask, grijs_frame
+
+                magenta_mask = cv2.inRange(hsv_frame, self.magenta_onderste, self.magenta_bovenste)
+                magenta_mask = cv2.dilate(magenta_mask, self.kernel)
+
+                magenta_count = cv2.countNonZero(magenta_mask)
+                rood_count = cv2.countNonZero(rood_mask)
+
+                print(str(magenta_count) + " magenta")
+                print(str(rood_count) + " rood")
+
+                # cv2.imshow("redmask", rood_mask)
+                # cv2.waitKey(0)
+
+                if magenta_count > rood_count:
+                    return 'none', grijs_frame
+                else:
+                    return rood_mask, grijs_frame
+
+                # cv2.imshow("fasf", rood_mask)
+                # cv2.waitKey(0)
             case 'groen':
                 groen_mask = cv2.inRange(hsv_frame, self.groen_onderste, self.groen_bovenste)
                 groen_mask = cv2.dilate(groen_mask, self.kernel)
@@ -152,10 +185,6 @@ class KleurenStand:
                 # moet nog aangepast worden naar magenta.
                 magenta_mask = cv2.inRange(hsv_frame, self.magenta_onderste, self.magenta_bovenste)
                 magenta_mask = cv2.dilate(magenta_mask, self.kernel)
-
-                # cv2.imshow("fasff", frame)
-                cv2.imshow("fasf", magenta_mask)
-                cv2.waitKey(0)
 
                 return magenta_mask, grijs_frame
 
@@ -178,13 +207,19 @@ class KleurenStand:
                 area = cv2.contourArea(contour)
 
                 if area > self.min_area:
-                    # self.angle_line = verste_punt
                     rect = cv2.minAreaRect(contour)
                     type_object = self.object_herkenning(rect, contour, grijs_frame)
-                    cx, cy = self.centroid(contour)
-                    vx, vy, x, y = cv2.fitLine(contour, cv2.DIST_L2, 0, 0.01, 0.01)
+                    if type_object is not None and type_object != "idk":
+                        cx, cy = self.centroid(contour)
+                        vx, vy, x, y = cv2.fitLine(contour, cv2.DIST_L2, 0, 0.01, 0.01)
+                        print(vx, vy)
 
-                    if type_object is not None:
+                        # Calculate two points on the line to draw the line
+                        lefty = int((-x * vy / vx) + y)
+                        righty = int(((self.frame.shape[1] - x) * vy / vx) + y)
+                        
+                        # Draw the line
+                        cv2.line(self.frame, (self.frame.shape[1] - 1, righty), (0, lefty), (0, 255, 0), 2)
                         if self.objecten.nieuw != {}:
                             last_item = next(reversed(self.objecten.nieuw))
                             new_item = int(last_item) + 1
@@ -297,6 +332,7 @@ class KleurenStand:
             rect: de minarearect van de contour
             verste_punt: wordt momenteel niet gebruikt (vervangt later self.angle_line), maar is het topje van de tang.
             grijs_frame: Een grijze variant van de frame/image die gebruikt wordt voor object herkenning.
+            contour: De contour.
         """
         box = cv2.boxPoints(rect)
         box = np.int0(box)
@@ -350,10 +386,10 @@ class KleurenStand:
             # is het een rechte tang. Anders een kromme tang.
             # Eventueel zou het aantal graden van de kromme tang nauwkeuriger gemaakt kunnen worden.
             if 85 <= angle <= 95:
-                # print("rechte tang" + " " + str(angle))
+                print("rechte tang" + " " + str(angle))
                 return "rechteTang"
-            if angle < 85:
-                # print("kromme tang" + " " + str(angle))
+            if 85 > angle or angle > 95:
+                print("kromme tang" + " " + str(angle))
                 return "krommeTang"
             else:
                 # print("idk")
@@ -419,9 +455,9 @@ class KleurenStand:
         cv2.line(frame, self.middle_point, self.angle_line, (255, 0, 0), 1)
         center = tuple(map(int, rect[0]))
         # cv2.putText(frame, str(key) + "" + str(value), (center[0], center[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, kleur)
-        cv2.putText(frame, str(1) + "" + str(self.objecten.focus_object[3]), (center[0], center[1] - 10), cv2.FONT_HERSHEY_SIMPLEX,
-                    0.5, kleur)
-
+        cv2.putText(frame, str(self.objecten.focus_object[0]) + " " + str(self.objecten.focus_object[4][0]) + str(self.objecten.focus_object[4][1]), (center[0], center[1] - 10),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    0.4, kleur)
 
     def get_kleur(self, kleur):
         """

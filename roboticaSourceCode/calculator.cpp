@@ -2,6 +2,9 @@
 #include "roboticaFunctions.h"
 #define _USE_MATH_DEFINES
 
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
+#include <vector>
 #include <math.h>
 #include <cmath>
 
@@ -26,8 +29,11 @@
 const double DEGREES_TO_RADIANS = M_PI / 180.0; //multiplication factor to turn degree values into radian values
 
 //variables 
+
 double base_rotation_angle = 90; // Angle between base and humerus in degrees
 double elbow_rotation_angle = 0; // Angle between humerus and ulna in degrees
+
+
 double length_humerus = 40.5; // Length of the humerus in units (cm)
 double length_ulna = 32.0; // Length of the ulna in units (cm)
 double camera_position_on_ulna = 30.0; // Distance from elbow joint to camera on ulna in units
@@ -135,13 +141,15 @@ double calculateGripperAngle(double vx, double vy) {
 double* calculateArmAngles(double x,double y,double distanceToTarget){ //x and y of the center of mass of the object, along with the distance.
 	double* armAngles = new double[2]; //create a pointer towards an array with two decimal numbers
 	//use trigonometry to calculate the angles: see https://www.geogebra.org/calculator/bf4wfqr5 for elaboration
-	armAngles[0] = fmod((acos((pow(length_humerus, 2) + pow(length_ulna, 2) - pow(distanceToTarget, 2)) / (2 * length_humerus * length_ulna)) + M_PI), (2 * M_PI))*(180/M_PI);//elbow
-	armAngles[1] = fmod((atan2(y, x) - atan2((length_ulna * sin(armAngles[0])), (length_humerus + length_ulna * cos(armAngles[0])))), (2 * M_PI))*(180/M_PI);//base angle, mult by gear ratio
+	armAngles[0] = 180 - (acos((pow(length_ulna,2)+pow(length_humerus,2)-pow(distanceToTarget,2))/(2*length_humerus*length_ulna)))*(180/M_PI);//elbow
+	armAngles[1] = ((acos((pow(distanceToTarget,2)+pow(length_humerus,2)-pow(length_ulna,2))/(2*length_humerus*distanceToTarget)))+atan(abs(y)/abs(x)))*(180/M_PI);//base angle
 	return armAngles; 
 }
-
 //run all the previous calculation
 double* calculator(double x, double y, double vx, double vy) {
+
+
+
 	double* results = new double[3];
 	std::cout << "external c++ calculator has run with parameters " << x << " " << y << " " << vx << " " << vy << " \n"; //debug log
 

@@ -14,7 +14,7 @@ int main() {
 
     double length_humerus = 40.5; // Length of the humerus in units (cm)
     double length_ulna = 32.0; // Length of the ulna in units (cm)
-    int x = 60;
+    int x = 58;
     int y = 0;
 
 
@@ -34,11 +34,13 @@ int main() {
         //results[0] = calculateGripperAngle(vx,vy);	//calculate angle for the gripper to be perpendicular to the scissors
         results[1] = armAngles[0]; //store the arm angle variables
         results[2] = armAngles[1];
-        if (results[1] > 150)
-            results[1] -= 360;
-        if (results[2] > 150)
-            results[2] -= 360;
-        std::cout << "angles: "<< results[1] << " "<< results[2] << std::endl;
+        std::cout << "angles1: "<< results[1] << " "<< results[2] << std::endl;
+        if (results[1] > 150){
+            std::cout << "out of range" << std::endl;
+        }else if (results[2] > 150){
+            std::cout << "out of range" << std::endl;
+        } else{
+        std::cout << "angles2: "<< results[1] << " "<< results[2] << std::endl;
 
         commandRotateServos = commandRotateServos + " " + std::to_string(0) + " " + std::to_string(results[1]) + " " + std::to_string(results[2]); // append the parameter arguments to the servo python script call
         system(commandRotateServos.c_str()); // call the servo python script
@@ -46,7 +48,9 @@ int main() {
 
 
         checkBluetooth();
+        }
         std::cout << "main c++ program done-----------------------------------------------------" << std::endl;
     }
     return 0;
 }
+//angles: -68.8375 -49.1572

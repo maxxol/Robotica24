@@ -16,80 +16,72 @@ fingerSpeed = 200
 degreesBool = True #servos in degree mode
 
 # Store angles provided by the calculator
-gripperAngle = float(sys.argv[1])
-elbowAngle = float(sys.argv[2])
-baseAngle = float(sys.argv[3])
+
 
 # Perform arithmetic operations
-elbowAngle *= 2
-baseAngle *= 3.33
+
 
 # Round the angles to the nearest integer for motor control
-gripperAngle = round(gripperAngle)
-elbowAngle = round(elbowAngle)
-baseAngle = round(baseAngle)
+
 
 gripperHeightRaisedAngle = -140
 gripperHeightLoweredAngle = 150
 fingerCloseAngle = -140
 fingerOpenAngle = -20
 
+def rotate_servos(gripperAngle, elbowAngle, baseAngle):
+	# gripperAngle = float(sys.argv[1])
+	# elbowAngle = float(sys.argv[2])
+	# baseAngle = float(sys.argv[3])
+	
+	elbowAngle *= 2
+	baseAngle *= 3.33
 
-#gripper rotate
-sc = Connection(port="/dev/serial0",baudrate=1000000, rpi_gpio=True)
-
-# #SC.write_data(servo_idx, pk.CW_ANGLE_LIMIT, 0)
-# sc.set_cw_angle_limit(dyx_idGripper, -150, degrees=True)
-# time.sleep(1)
-# #SC.write_data(servo_idx, pk.CCW_ANGLE_LIMIT, 0)
-# sc.set_ccw_angle_limit(dyx_idGripper, 150, degrees=True)
-# time.sleep(1)
-# sc.goto(dyx_idElbow, 0, speed=rotateSpeed, degrees=degreesBool)
-# time.sleep(10)
-# sc.goto(dyx_idElbow, 150, speed=rotateSpeed, degrees=degreesBool)
-# time.sleep(10)
-# sc.goto(dyx_idElbow, -150, speed=rotateSpeed, degrees=degreesBool)
-# time.sleep(10)
-#sc.pretty_print_control_table(dyx_idFingers)
-
-#ALL JOINT MODE 
-sc.set_cw_angle_limit(dyx_idGripper, -150, degrees=True)
-sc.set_ccw_angle_limit(dyx_idGripper, 150, degrees=True)
-
-sc.set_cw_angle_limit(dyx_idFingers, -150, degrees=True)
-sc.set_ccw_angle_limit(dyx_idFingers, 150, degrees=True)
-
-sc.set_cw_angle_limit(dyx_idBase, -150, degrees=True)
-sc.set_ccw_angle_limit(dyx_idBase, 150, degrees=True)
-
-sc.set_cw_angle_limit(dyx_idGripperHeight, -150, degrees=True)
-sc.set_ccw_angle_limit(dyx_idGripperHeight, 150, degrees=True)
-
-sc.set_cw_angle_limit(dyx_idElbow, -150, degrees=True)
-sc.set_ccw_angle_limit(dyx_idElbow, 150, degrees=True)
-time.sleep(2)
+	gripperAngle = round(gripperAngle)
+	elbowAngle = round(elbowAngle)
+	baseAngle = round(baseAngle)
 
 
-sc.goto(dyx_idElbow, elbowAngle, speed=rotateSpeed, degrees=degreesBool)
-sc.goto(dyx_idBase, baseAngle, speed=rotateSpeed, degrees=degreesBool)
-time.sleep(10)
-sc.goto(dyx_idElbow, 0, speed=rotateSpeed, degrees=degreesBool)
-sc.goto(dyx_idBase, 0, speed=rotateSpeed, degrees=degreesBool)
-time.sleep(10)
 
-# sc.goto(dyx_idGripperHeight, gripperHeightLoweredAngle, speed=rotateSpeed, degrees=degreesBool)
-# sc.goto(dyx_idGripper, gripperAngle, speed=rotateSpeed, degrees=degreesBool)
-# time.sleep(4)
+	#gripper rotate
+	sc = Connection(port="/dev/serial0",baudrate=1000000, rpi_gpio=True)
 
-# sc.goto(dyx_idFingers, fingerCloseAngle, speed=fingerSpeed, degrees=degreesBool)
-# time.sleep(4)
+	#ALL JOINT MODE 
+	sc.set_cw_angle_limit(dyx_idGripper, -150, degrees=True)
+	sc.set_ccw_angle_limit(dyx_idGripper, 150, degrees=True)
 
-# sc.goto(dyx_idGripperHeight, gripperHeightRaisedAngle , speed=rotateSpeed, degrees=degreesBool)
-# sc.goto(dyx_idGripper, 0, speed=rotateSpeed, degrees=degreesBool)
-# time.sleep(4)
+	sc.set_cw_angle_limit(dyx_idFingers, -150, degrees=True)
+	sc.set_ccw_angle_limit(dyx_idFingers, 150, degrees=True)
 
-# sc.goto(dyx_idFingers, fingerOpenAngle, speed=fingerSpeed, degrees=degreesBool)
-# time.sleep(4)
+	sc.set_cw_angle_limit(dyx_idBase, -150, degrees=True)
+	sc.set_ccw_angle_limit(dyx_idBase, 150, degrees=True)
+
+	sc.set_cw_angle_limit(dyx_idGripperHeight, -150, degrees=True)
+	sc.set_ccw_angle_limit(dyx_idGripperHeight, 150, degrees=True)
+
+	sc.set_cw_angle_limit(dyx_idElbow, -150, degrees=True)
+	sc.set_ccw_angle_limit(dyx_idElbow, 150, degrees=True)
+	time.sleep(2)
+
+
+	sc.goto(dyx_idElbow, elbowAngle, speed=rotateSpeed, degrees=degreesBool)
+	sc.goto(dyx_idBase, baseAngle, speed=rotateSpeed, degrees=degreesBool)
+	time.sleep(5)
+
+
+	# sc.goto(dyx_idGripperHeight, gripperHeightLoweredAngle, speed=rotateSpeed, degrees=degreesBool)
+	# sc.goto(dyx_idGripper, gripperAngle, speed=rotateSpeed, degrees=degreesBool)
+	# time.sleep(4)
+
+	# sc.goto(dyx_idFingers, fingerCloseAngle, speed=fingerSpeed, degrees=degreesBool)
+	# time.sleep(4)
+
+	# sc.goto(dyx_idGripperHeight, gripperHeightRaisedAngle , speed=rotateSpeed, degrees=degreesBool)
+	# sc.goto(dyx_idGripper, 0, speed=rotateSpeed, degrees=degreesBool)
+	# time.sleep(4)
+
+	# sc.goto(dyx_idFingers, fingerOpenAngle, speed=fingerSpeed, degrees=degreesBool)
+	# time.sleep(4)
 
 
 
@@ -106,14 +98,3 @@ time.sleep(10)
 # sc.goto(dyx_idBase, 0, speed=rotateSpeed, degrees=degreesBool)
 # time.sleep(5)
 
-
-'''
-#elbow rotate
-sc.goto(dyx_idElbow, elbowAngle, speed=rotateSpeed, degrees=degreesBool)
-
-#base rotate
-sc.goto(dyx_idBase, baseAngle, speed=rotateSpeed, degrees=degreesBool)
-'''
-#time.sleep(1)
-# sc.goto(dyx_idGripper, 0, speed=rotateSpeed, degrees=degreesBool)
-# time.sleep(1)
