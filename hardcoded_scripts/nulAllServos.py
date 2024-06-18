@@ -2,7 +2,7 @@ import sys
 from pyax12.connection import Connection
 import RPi.GPIO as gpio
 import time
-from getServoPositions import getPosition
+
 '''
 picks up a stationary kilogram cylinder that is manually placed underneath the gripper
 '''
@@ -46,8 +46,3 @@ time.sleep(1)
 sc.goto(dyx_idBase, 0, speed=rotateSpeed, degrees=degreesBool)
 time.sleep(5)
 
-print(getPosition(dyx_idBase))
-print(getPosition(dyx_idElbow))
-print(getPosition(dyx_idFingers))
-print(getPosition(dyx_idGripper))
-print(getPosition(dyx_idGripperHeight))

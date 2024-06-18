@@ -11,7 +11,7 @@ sys.path.append(parent_dir)
 from calculator import calculator
 from checkbluetooth import check_bluetooth
 from computerVision import get_computer_vision_results
-from rotateServos import rotate_servos
+from rotateArmServos import rotate_arm_servos
 # Assuming the `main` function and `rotate_servos` function are defined in their respective modules
 #from main import get_computer_vision_results
 
@@ -33,14 +33,13 @@ def main():
 				calc_results = calculator(computer_vision_results[0], computer_vision_results[1], computer_vision_results[2], computer_vision_results[3])
 				print(f"calc results: {calc_results[0]} {calc_results[1]} {calc_results[2]}")
 				# Call the rotate servos function with the calculated parameters
-				rotate_servos(calc_results[0], calc_results[1], calc_results[2])
+				rotate_arm_servos(calc_results[0], calc_results[1], calc_results[2])
 				print("sent servos")
 				# Check Bluetooth
 				check_bluetooth()
 
-				print("main Python program done-----------------------------------------------------")
-			except:
-				print("error",err)
+				#print("main Python program done-----------------------------------------------------")
+			except Exception as e: print(e)
 
 if __name__ == "__main__":
 	main()

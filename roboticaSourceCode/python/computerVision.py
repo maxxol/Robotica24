@@ -7,11 +7,11 @@ def get_computer_vision_results():
 
 	def colorRange(hsv, color_name):
 		if color_name.lower() == "blue":
-			lower = np.array([95, 30, 30])
+			lower = np.array([95, 20, 20])
 			upper = np.array([130, 255, 255])
 			return cv.inRange(hsv, lower, upper)
 		elif color_name.lower() == "green":
-			lower = np.array([40, 50, 50])
+			lower = np.array([40, 40, 40])
 			upper = np.array([75, 255, 255])
 			return cv.inRange(hsv, lower, upper)
 		elif color_name.lower() == "red":

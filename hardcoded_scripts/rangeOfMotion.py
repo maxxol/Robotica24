@@ -18,15 +18,11 @@ fingerSpeed = 200
 degreesBool = True #servos in degree mode
 
 #store angles provided by the calculator
-gripperAngle = float(sys.argv[1])
-elbowAngle = sys.argv[2]
-baseAngle = sys.argv[3]
 gripperHeightRaisedAngle = -120
 gripperHeightLoweredAngle = 150
 fingerCloseAngle = -140
 fingerOpenAngle = -20
 
-gripperAngle = round(gripperAngle)
 
 #gripper rotate
 sc = Connection(port="/dev/serial0",baudrate=1000000, rpi_gpio=True)

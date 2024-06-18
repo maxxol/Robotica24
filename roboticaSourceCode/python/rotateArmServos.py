@@ -29,7 +29,7 @@ gripperHeightLoweredAngle = 150
 fingerCloseAngle = -140
 fingerOpenAngle = -20
 
-def rotate_servos(gripperAngle, elbowAngle, baseAngle):
+def rotate_arm_servos(gripperAngle, elbowAngle, baseAngle):
 	# gripperAngle = float(sys.argv[1])
 	# elbowAngle = float(sys.argv[2])
 	# baseAngle = float(sys.argv[3])
