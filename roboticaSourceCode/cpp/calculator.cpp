@@ -147,9 +147,6 @@ double* calculateArmAngles(double x,double y,double distanceToTarget){ //x and y
 }
 //run all the previous calculation
 double* calculator(double x, double y, double vx, double vy) {
-
-
-
 	double* results = new double[3];
 	std::cout << "external c++ calculator has run with parameters " << x << " " << y << " " << vx << " " << vy << " \n"; //debug log
 
