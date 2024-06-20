@@ -2,6 +2,10 @@ import cv2 as cv
 import numpy as np
 from pyax12.connection import Connection
 import RPi.GPIO as gpio
+import time 
+
+gpio.setup(18, gpio.OUT)
+
 def get_computer_vision_results():
 	GREEN_SCISSOR = True
 
@@ -29,8 +33,11 @@ def get_computer_vision_results():
 
 	camera_index = 0
 	cam = cv.VideoCapture(camera_index)
-
+	gpio.output(18, gpio.HIGH)
+	time.sleep(0.03)
 	ret, image = cam.read()
+	time.sleep(0.03)
+	gpio.output(18, gpio.LOW) 
 	hsv = cv.cvtColor(image, cv.COLOR_BGR2HSV)
 
 	if GREEN_SCISSOR:

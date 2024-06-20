@@ -40,9 +40,10 @@ time.sleep(2)
 
 sc.goto(dyx_idGripperHeight, 0, speed=fingerSpeed, degrees=degreesBool)
 sc.goto(dyx_idGripper, 0, speed=(rotateSpeed), degrees=degreesBool)
-sc.goto(dyx_idFingers, -20, speed=fingerSpeed, degrees=degreesBool)
+sc.goto(dyx_idFingers, 10, speed=fingerSpeed, degrees=degreesBool)
 sc.goto(dyx_idElbow, 0, speed=rotateSpeed, degrees=degreesBool)
-time.sleep(1)
 sc.goto(dyx_idBase, 0, speed=rotateSpeed, degrees=degreesBool)
 time.sleep(5)
 
+
+gpio.cleanup()

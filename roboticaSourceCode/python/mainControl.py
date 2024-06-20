@@ -3,6 +3,7 @@ from pyax12.connection import Connection
 import serial
 import datetime
 from servo import Servo, ServoMode, Direction
+from time import sleep
 
 rfcomm_port = "/dev/rfcomm0"
 connect_script = "../shell/connect_rfcomm.sh"
@@ -37,9 +38,9 @@ def process_data(data):
                 SERVO_ROTATE.turn_wheel(direction=Direction.CLOCKWISE)            
 
             if gr_close:
-                SERVO_GRIP.turn_wheel(direction=Direction.CLOCKWISE)
+                SERVO_GRIP.turn_wheel(speed=0.5,direction=Direction.CLOCKWISE)
             elif gr_open:
-                SERVO_GRIP.turn_wheel(direction=Direction.COUNTER_CLOCKWISE)
+                SERVO_GRIP.turn_wheel(speed=0.5,direction=Direction.COUNTER_CLOCKWISE)
 
             if joystick_z > 50:
                 SERVO_VERTICAL.turn_wheel(speed=0.6, direction=Direction.CLOCKWISE)
@@ -58,7 +59,7 @@ def process_data(data):
             if joystick_y > 50:
                 SERVO_SHOULDER.turn_wheel(speed=0.5, direction=Direction.CLOCKWISE)
             elif joystick_y < -50:
-                SERVO_SHOULDER.turn_wheel(speed=0.6, direction=Direction.COUNTER_CLOCKWISE)
+                SERVO_SHOULDER.turn_wheel(speed=0.5, direction=Direction.COUNTER_CLOCKWISE)
             elif -50 < joystick_y < 50:
                 SERVO_SHOULDER.stop_wheel()
 

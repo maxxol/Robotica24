@@ -66,22 +66,29 @@ def rotate_arm_servos(gripperAngle, elbowAngle, baseAngle):
 
 	sc.goto(dyx_idElbow, elbowAngle, speed=rotateSpeed, degrees=degreesBool)
 	sc.goto(dyx_idBase, baseAngle, speed=rotateSpeed, degrees=degreesBool)
+	sc.goto(dyx_idGripper, gripperAngle, speed=rotateSpeed, degrees=degreesBool)
+
 	time.sleep(5)
 
 
-	# sc.goto(dyx_idGripperHeight, gripperHeightLoweredAngle, speed=rotateSpeed, degrees=degreesBool)
-	# sc.goto(dyx_idGripper, gripperAngle, speed=rotateSpeed, degrees=degreesBool)
-	# time.sleep(4)
+	sc.goto(dyx_idGripperHeight, gripperHeightLoweredAngle, speed=1000, degrees=degreesBool)
+	sc.goto(dyx_idGripper, gripperAngle, speed=rotateSpeed, degrees=degreesBool)
+	time.sleep(4)
 
-	# sc.goto(dyx_idFingers, fingerCloseAngle, speed=fingerSpeed, degrees=degreesBool)
-	# time.sleep(4)
+	sc.goto(dyx_idFingers, fingerCloseAngle, speed=fingerSpeed, degrees=degreesBool)
+	sc.goto(dyx_idGripperHeight, gripperHeightLoweredAngle-100, speed=500, degrees=degreesBool)
 
-	# sc.goto(dyx_idGripperHeight, gripperHeightRaisedAngle , speed=rotateSpeed, degrees=degreesBool)
-	# sc.goto(dyx_idGripper, 0, speed=rotateSpeed, degrees=degreesBool)
-	# time.sleep(4)
+	time.sleep(4)
 
-	# sc.goto(dyx_idFingers, fingerOpenAngle, speed=fingerSpeed, degrees=degreesBool)
-	# time.sleep(4)
+	sc.goto(dyx_idGripperHeight, gripperHeightRaisedAngle , speed=1000, degrees=degreesBool)
+	sc.goto(dyx_idGripper, 0, speed=rotateSpeed, degrees=degreesBool)
+	time.sleep(4)
+
+	sc.goto(dyx_idElbow, 0, speed=rotateSpeed, degrees=degreesBool)
+	sc.goto(dyx_idBase, 0, speed=rotateSpeed, degrees=degreesBool)
+	time.sleep(5)
+	sc.goto(dyx_idFingers, fingerOpenAngle, speed=fingerSpeed, degrees=degreesBool)
+	time.sleep(5)
 
 
 

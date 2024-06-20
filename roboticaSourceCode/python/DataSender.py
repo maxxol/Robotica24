@@ -12,5 +12,5 @@ class DataSender:
         return object_coordinaten[0], object_coordinaten[1], object_coordinaten[3][0], object_coordinaten[3][1], object_coordinaten[4][0], object_coordinaten[4][1]
 
     def verstuur_target_coordinaten(self, target_coordinaten):
-        print(target_coordinaten[0], target_coordinaten[1])
+        #print(target_coordinaten[0], target_coordinaten[1])
         return target_coordinaten

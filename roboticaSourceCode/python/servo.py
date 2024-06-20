@@ -35,7 +35,7 @@ class Servo():
         param speed: float in range [0, 1]; determines the speed of servo as a percentage (0 => 0%, 1 => 100%)
         param cw: boolean; True for clockwise rotation; False for counter-clockwise
     """
-    def turn_wheel(self, speed=0.3, direction=Direction.COUNTER_CLOCKWISE):
+    def turn_wheel(self, speed=0.2, direction=Direction.COUNTER_CLOCKWISE):
         if direction == Direction.COUNTER_CLOCKWISE:
             ccw_total_speed = 1023 - 0
             desired_speed   = int(speed * ccw_total_speed)

@@ -14,14 +14,14 @@ int main() {
 
     double length_humerus = 40.5; // Length of the humerus in units (cm)
     double length_ulna = 32.0; // Length of the ulna in units (cm)
-    int x = 58;
+    int x = 60;
     int y = 0;
 
 
     while(true) {
         double* results = new double[3];
         std::string pythonFilepath = "python3 /home/rob8/Robotica24/roboticaSourceCode/python/"; // general filepath for the python scripts
-        std::string commandRotateServos = pythonFilepath + "rotateServos.py"; // servo command script
+        std::string commandRotateServos = pythonFilepath + "rotateArmServos.py"; // servo command script
         
         Point pointC;
         pointC.x = x;
